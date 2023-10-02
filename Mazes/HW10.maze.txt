@@ -1,0 +1,25 @@
+6	6	1	14	4	0
+Ground.bmp
+ceiling-Tile.bmp
+0.5	0.0	6.0	0.0	Rock.bmp
+6.0	0.0	6.0	5.5	Rock.bmp
+5.5	6.0	0.0	6.0	Rock.bmp
+0.0	6.0	0.0	0.5	Rock.bmp
+0.0	0.5	-0.5	0.0	Rock.bmp
+-0.5	0.0	0.0	-0.5	Rock.bmp
+0.0	-0.5	0.5	0.0	Rock.bmp
+5.5	6.0	6.0	6.5	Cheese.bmp
+6.0	6.5	6.5	6.0	Cheese.bmp
+6.5	6.0	6.0	5.5	Cheese.bmp
+2 6 2 1	Rock.bmp
+2 1 4 1	Rock.bmp
+4 2 4 5	Rock.bmp
+4 5 6 5	Rock.bmp
+	0 1 2 1
+	0 3 2 3
+	4 3 6 3
+	4 2 6 2
+
+width	depth	trials	walls
+//line is listed as width then depth, for the start and end of line
+//first 10 walls are the default 'open' maze

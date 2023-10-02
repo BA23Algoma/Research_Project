@@ -1,0 +1,18 @@
+0		% participantId
+5		% nBlocks
+1		% nPracticeTrials
+1		% tourHand (1 = LEFT HAND; 2 = RIGHT HAND)
+1		% inputDevice (1 = KEYBOARD; 2 = JOYSTICK)
+0.125000	% playerBodyRadius
+0.075000	% playerDeltaUnitPerFrame
+3.000000	% playerDeltaDegPerFrame
+0.075000	% tourDeltaUnitPerFrame
+3.000000	% tourDeltaDegPerFrame
+1		% viewPoint (1 = FIRST PERSON; 2 = THIRD PERSON)
+60.000000	% frameRate
+55.000000	% perspectiveAngle
+-0.400000	% eyeLevel (-0.5 is a good number)
+0.100000	% coordPollInterval
+240.000000	% coordPollTimeLimit
+800		% screenWidth
+600		% screenHeight
