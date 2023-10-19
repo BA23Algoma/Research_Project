@@ -1,0 +1,45 @@
+Distal Queue From Model (OBJ)
+
+% Distal feature cliff
+            if obj.distalQueueFlag
+                obj.distalQueue = LoadOBJFile(fullfile(obj.texPath, 'D_Rock_Formation_CM.obj'), 1, 1);    
+                obj = obj.AddTexture(GlTexture(obj.texPath, 'D_Rock_Formation_BaseColor.png'));
+            end
+
+if obj.distalQueueFlag
+
+                 % Assume obj.hillProp is a loaded 3D object with vertices and faces
+                vertices = obj.distalQueue{1}.vertices;
+                texcoords = obj.distalQueue{1}.texcoords; % Assuming UV coordinates exist
+                normals = obj.distalQueue{1}.normals; % Assuming normals exist
+                faces = obj.distalQueue{1}.faces;
+   
+                % Draw Distal Queue (Hill)
+                glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(5));
+
+                for mesh = obj.distalQueue
+
+                    % Set material properties for the mesh (e.g., colors)
+                    %glMaterialfv(obj.GL.FRONT, obj.GL.AMBIENT, [0.2, 0.2, 0.2, 1.0]);
+                    %glMaterialfv(obj.GL.FRONT, obj.GL.DIFFUSE, [0.8, 0.8, 0.8, 1.0]);
+                    %glMaterialfv(obj.GL.FRONT, obj.GL.SPECULAR, [0.8, 0.8, 0.8, 1.0]);
+                    %glMaterialfv(obj.GL.FRONT, obj.GL.SHININESS, 128.0);
+                    
+                    % Render the mesh's geometry
+                    glBegin(obj.GL.TRIANGLES); % Change to GL.QUADS if needed
+                    for i = 1:size(faces, 2)
+                        for j = 1:3
+                            vertexIndex = faces(j, i) + 1;
+                            vertex = vertices(:, vertexIndex);
+                            textcoords = texcoords(:, vertexIndex);
+                            normal = normals(:, vertexIndex);
+                            
+                            % You can use vertex, uv, and normal to render the 3D object
+                            glTexCoord2fv(textcoords);
+                            glNormal3fv(normal);
+                            glVertex3fv(vertex);
+                        end
+                    end
+                end
+
+                glEnd();

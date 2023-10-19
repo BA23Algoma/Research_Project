@@ -1,19 +1,19 @@
-function MazeExp
-    
-    %     % GUI modifiable parameters
+        function MazeExp
+        
+       %     %   GUI modifiable parameter      s
     %     p.participantId                 = 0;
-    %     p.nBlocks                       = 5;
+    %     p.nBlocks                       = 5;  
     %     p.nPracticeTrials               = 5;     
     %     p.tourHand                      = 1;
     %     p.inputDevice                   = 1;
-    %     p.playerBodyRadius              = 0.125;
+    %     p.playerBodyRadius              = 0.125  ;
     %     p.playerDeltaUnitPerFrame       = 0.075;
     %     p.playerDeltaDegPerFrame        = 3.0;
-    %     p.tourDeltaUnitPerFrame         = 0.075;
+    %     p.tourDeltaUnitPerFr ame         = 0.075;
     %     p.tourDeltaDegPerFrame          = 3.0;
     %     p.viewPoint                     = 1;
-    %     p.frameRate                     = 60;
-    %     p.perspectiveAngle              = 45;
+    %     p.frameRate                     = 60      ;
+    %     p.perspectiv eAngle              = 45;
     %     p.eyeLevel                      = -0.55;
     %     p.coordPollInterval             = 0.1;
     %     p.coordPollTimeLimit            = 240;
@@ -35,17 +35,17 @@ function MazeExp
         
     end
     
-    p.nowNum = now;
+    p.nowNum = now;  
     
     % Internal fixed parameters
     p.checkCollisionFlag            = 1;
     
     % Path
     p.dataPath                      = 'Data';
-    p.eolPracticeFlag               = 1  ;
-    p.initialTourFlag               = 1;
-    p.blockPracticeFlag             = 1;
-    p.blockTourFlag                 = 1;
+    p.eolPracticeFlag               = 0;
+    p.initialTourFlag               = 0;
+    p.blockPracticeFlag             = 0;
+    p.blockTourFlag                 = 0  ;
     p.blockRunFlag                  = 1;
     
     if (exist(p.dataPath, 'dir')==7)
@@ -110,17 +110,6 @@ function MazeExp
     
     % SplashScreen
     splashScreen = SplashScreen;
-
-    %Initialize the gazepoint eye track
-        %% Set-up Matlab to GP3 session1 socket
-        session1_client = ConnectingToGP;
-
-        %% Spawn a second Matlab session2 that records GP3 data to output file
-        outputFileName = 'gazepoint_example_output.txt';
-        ExecuteRecordGP3Data(session1_client,outputFileName);
-
-        % Run calibration
-        StartCalibration(session1_client);
     
     % -----------------------
     % PHASE 1 (PRACTICE EOL)
@@ -133,10 +122,7 @@ function MazeExp
         schedule = Schedule(p.participantId, 'PRACTICE', p.nPracticeTrials, p.tourHand);
         
         for trialIndex = 1:schedule.nTrials
-
-             % Start of new trial here gazepoint data collection
-             SendMsgToGP3(session1_client,['trial_start' num2str(trial_num)]); %send msg trigger for start of the trial
-            
+       
             % Load maze
             mazeFileIndex = schedule.trials(trialIndex, Schedule.COL.MAZE_FILE_INDEX);
             mazeFileName = schedule.mazeFileNames{mazeFileIndex};
@@ -153,12 +139,6 @@ function MazeExp
             rating.RatingSelect(render, inputDevice, 'EOL');
             
         end
-
-        %% Stop collecting data in session2 socket
-        SendMsgToGP3(session1_client,'STOP_EYETRACKER');
-        
-        %Close the session socket
-        CleanUpSocket(session1_client);
         
     end
     
@@ -170,7 +150,7 @@ function MazeExp
         
         splashScreen.ShowSplashScreen(render, inputDevice, 'Instructions2.jpg', 'Textures');        
         
-        for trialIndex = randperm(expSchedule.nTrials);        
+        for trialIndex = randperm(expSchedule.nTrials)        
             
             % Load maze
             mazeFileIndex = expSchedule.trials(trialIndex, Schedule.COL.MAZE_FILE_INDEX);
@@ -255,7 +235,7 @@ function MazeExp
                 
                 trialIndex = labelIndex + (blockIndex-1) * expSchedule.nMazesPerBlock;
                 
-                % Load maze
+                % Load maze        
                 mazeFileIndex = expSchedule.trials(trialIndex, Schedule.COL.MAZE_FILE_INDEX);
                 mazeFileName = expSchedule.mazeFileNames{mazeFileIndex};
                 
@@ -321,9 +301,9 @@ function MazeExp
         end
         
     end
-    
+             
     expSchedule.SaveToFile(p);
-    
+          
     splashScreen.ShowSplashScreen(render, inputDevice, 'Debriefing.jpg', 'Textures');
     
     Render.Close();

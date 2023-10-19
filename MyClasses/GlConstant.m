@@ -1,4 +1,4 @@
-classdef GL_Constant
+classdef GlConstant
     
     
     properties (SetAccess = private)
