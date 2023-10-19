@@ -13,8 +13,12 @@ classdef Render
         perspectiveAngle    = 55;
         eyeLevel            = -0.55;
         ceilingFlag         = 1;
+        skybox;
+        skyboxFace          = 1;
         tripwireFlag        = 0;
-        
+        distalQueueFlag     = 0;
+        distalQueueName;
+        distalQueueTarget;
     end
     
     properties (SetAccess = protected)
@@ -41,8 +45,8 @@ classdef Render
         GL;
         GLU;
         
-        oldWidth    = 1440;
-        oldHeight   = 900;
+        oldWidth    = 1376;
+        oldHeight   = 768;
         
     end
     
@@ -95,7 +99,7 @@ classdef Render
             Screen('Preference','VisualDebugLevel', 0);
             Screen('Preference', 'Verbosity', 0);
             
-            %Banki edit for screen selection
+            %*****Banki edit for screen selection
             % Get the screen numbers. This gives us a number for each of the screens
             % attached to our computer.
             screensCheck = Screen('Screens');
@@ -104,16 +108,13 @@ classdef Render
             % have two screens attached to our monitor we will draw to the external
             % screen.
             screenNumber = max(screensCheck);
+            %obj.screenId = screenNumber;
             obj.screenId = 0;
             
             % Encapsulate and protect AGL, GL, and GLU constants
             
-            %include agl if mac OS
-            if ismac
-                eval('agl = AGL;');
-                obj.AGL = agl;
-            end
-
+            %eval('agl = AGL;');
+            %obj.AGL = agl;
             eval('gl = GL;');
             obj.GL = gl;
             eval('glul = GLU;');
@@ -144,7 +145,7 @@ classdef Render
             if obj.viewPoint == 2
                 
                 obj.teapotFlag = 1;
-                obj.ceilingFlag = 0;
+                obj.ceilingFlag = 1;%was zero banki
                 obj.tripwireFlag = 1;
                 
             else
@@ -159,12 +160,22 @@ classdef Render
             obj = InitOpenGl(obj);
             obj = obj.AddTexture(GlTexture(obj.texPath, 'wall.jpg'));
             obj = obj.AddTexture(GlTexture(obj.texPath, 'cheese.bmp'));
-            obj = obj.AddTexture(GlTexture(obj.texPath, 'ground.jpg'));
-            obj = obj.AddTexture(GlTexture(obj.texPath, 'ceilingtile.jpg'));
             obj = obj.AddTexture(GlTexture(obj.texPath, 'tripwire.jpg'));
-            obj = obj.AddTextureWall(GlTexture(obj.texPath, 'ceilingtile.jpg'));
-            obj = obj.AddTextureSun(GlTexture(obj.texPath, 'sun_two.jpg')); 
+
+
+            %fprintf('screen Id after base walls is %f\n',  obj.nTex);
+            % Skybox texture loading
+
+            skyboyTex = {"skybox_right.jpg", "skybox_left.jpg", "skybox_top.jpg"...
+                "skybox_ground.jpg", "skybox_back.jpg", "skybox_front.jpg"};
+            obj = obj.AddTextureSkybox(skyboyTex);
             
+            % Distal feature (moon)
+            if obj.distalQueueFlag
+                obj = obj.AddTextureDistalQueue('moon.jpg',  obj.viewportPtr);
+            end
+            %fprintf('screen Id after buildnig moon is %f\n',  obj.texNumId(texIndex));
+
         end
         
         function obj = OpenPtbWindow(obj)
@@ -284,66 +295,76 @@ classdef Render
             
         end
 
-        %Banki - Texture mapping for perimeter walls
-        function obj = AddTextureWall(obj, texObj)
-            
-            if ~isa(texObj, 'GlTexture')
-                
-                error('AddTexture needs a GlTexture object');
-                
-            end
-            
-            obj.nTex = obj.nTex + 1;
-            texIndex = obj.nTex;
-            
-            while texIndex > numel(obj.texNumId)
-                
-                obj.texNumId = [obj.texNumId zeros(1, 100)];
-                
-            end
-            
-            obj.texNumId(texIndex) = glGenTextures(1);
-            
-            glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(texIndex));
-            glTexImage2D(obj.GL.TEXTURE_2D, 0, obj.GL.RGB, texObj.nRows, texObj.nCols, 0, obj.GL.RGB, obj.GL.UNSIGNED_BYTE, texObj.pixels);
-            glTexParameterfv(obj.GL.TEXTURE_2D,obj.GL.TEXTURE_WRAP_S,obj.GL.MIRRORED_REPEAT);
-            glTexParameterfv(obj.GL.TEXTURE_2D,obj.GL.TEXTURE_WRAP_T,obj.GL.MIRRORED_REPEAT);
-            glTexParameterfv(obj.GL.TEXTURE_2D,obj.GL.TEXTURE_MAG_FILTER,obj.GL.NEAREST);
-            glTexParameterfv(obj.GL.TEXTURE_2D,obj.GL.TEXTURE_MIN_FILTER,obj.GL.NEAREST);
-            
-        end
+          %Banki - Texture mapping for 3D Skybox feature
+        function obj = AddTextureSkybox(obj, faces)
 
-        %Banki - Texture mapping for distall feature
-        function obj = AddTextureSun(obj, texObj)
-            
-            if ~isa(texObj, 'GlTexture')
-                
-                error('AddTexture needs a GlTexture object');
-                
+            if numel(faces) ~= 6
+                error('A cube map texture requires exactly 6 image file paths.');
             end
-            
+        
             obj.nTex = obj.nTex + 1;
             texIndex = obj.nTex;
             
             while texIndex > numel(obj.texNumId)
-                
                 obj.texNumId = [obj.texNumId zeros(1, 100)];
-                
             end
             
             obj.texNumId(texIndex) = glGenTextures(1);
             
-            glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(texIndex));
-            glTexImage2D(obj.GL.TEXTURE_2D, 0, obj.GL.RGB, texObj.nRows, texObj.nCols, 0, obj.GL.RGB, obj.GL.UNSIGNED_BYTE, texObj.pixels);
-            %fprintf('%i width, %i height', texObj.nRows, texObj.nCols);
-            glTexParameterfv(obj.GL.TEXTURE_2D,obj.GL.TEXTURE_WRAP_S,obj.GL.CLAMP_TO_EDGE);
-            glTexParameterfv(obj.GL.TEXTURE_2D,obj.GL.TEXTURE_WRAP_T,obj.GL.CLAMP_TO_EDGE);
-            glTexParameterfv(obj.GL.TEXTURE_2D,obj.GL.TEXTURE_MAG_FILTER,obj.GL.NEAREST);
-            glTexParameterfv(obj.GL.TEXTURE_2D,obj.GL.TEXTURE_MIN_FILTER,obj.GL.NEAREST);
+            glBindTexture(obj.GL.TEXTURE_CUBE_MAP, obj.texNumId(texIndex));
             
+            for i = 1:6
+                data = imread(faces{i});
+                glTexImage2D(obj.GL.TEXTURE_CUBE_MAP_POSITIVE_X + i - 1, 0, obj.GL.RGB, size(data, 2), size(data, 1), 0, obj.GL.RGB, obj.GL.UNSIGNED_BYTE, data);
+            end
+            
+            glTexParameteri(obj.GL.TEXTURE_CUBE_MAP, obj.GL.TEXTURE_MIN_FILTER, obj.GL.LINEAR);
+            glTexParameteri(obj.GL.TEXTURE_CUBE_MAP, obj.GL.TEXTURE_MAG_FILTER, obj.GL.LINEAR);
+            glTexParameteri(obj.GL.TEXTURE_CUBE_MAP, obj.GL.TEXTURE_WRAP_S, obj.GL.CLAMP_TO_EDGE);
+            glTexParameteri(obj.GL.TEXTURE_CUBE_MAP, obj.GL.TEXTURE_WRAP_T, obj.GL.CLAMP_TO_EDGE);
+            glTexParameteri(obj.GL.TEXTURE_CUBE_MAP, obj.GL.TEXTURE_WRAP_R, obj.GL.CLAMP_TO_EDGE);
         end
-        
-        
+     
+        function obj = AddTextureDistalQueue(obj, textFileName, window)
+
+            % Load texture
+            image = imread(textFileName);
+            [s1, ~, ~] = size(image);
+            image = im2double(image(1:s1, 1:s1, :));
+            
+            % Convert to a texture for PTB drawing (orientation needs changing for
+            % rendering)
+            imageFlipped = rot90(flipud(image));
+            modelTexture = Screen('MakeTexture', window, imageFlipped, [], 1, 2);
+            
+            % Get the information we need about the texture
+            [imw, imh] = Screen('WindowSize', modelTexture);
+            [textureName, targetFront, ~, ~] = Screen('GetOpenGLTexture', window, modelTexture, imh, imw);
+            
+            %Create global attributes
+            obj.distalQueueName = textureName;
+            obj.distalQueueTarget = targetFront;
+
+            % Bind our texture and setup filtering to allow nice presentation of our
+            % texture
+            glBindTexture(targetFront, textureName);
+            glGenerateMipmapEXT(targetFront); 
+            
+            glTexParameterf(targetFront, obj.GL.TEXTURE_MAG_FILTER, obj.GL.LINEAR);
+            glTexParameterf(targetFront, obj.GL.TEXTURE_MIN_FILTER, obj.GL.LINEAR_MIPMAP_LINEAR);
+            
+            % Allow the texture and lighting to interact
+            glTexEnvfv(obj.GL.TEXTURE_ENV, obj.GL.TEXTURE_ENV_MODE, obj.GL.MODULATE);
+            
+            % This gives nice texture rendering without artifacts
+            maxAnisotropy = glGetFloatv(obj.GL.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+            glTexParameterf(targetFront, obj.GL.TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy);
+            
+            % Clamping behaviour shall be a cyclic repeat:
+            glTexParameteri(targetFront, obj.GL.TEXTURE_WRAP_S, obj.GL.REPEAT);
+            glTexParameteri(targetFront, obj.GL.TEXTURE_WRAP_T, obj.GL.REPEAT);
+                        
+        end
         
         function obj = InitOpenGl(obj)
             
@@ -352,7 +373,6 @@ classdef Render
                 error('A PTB window must be opened prior to OpenGL initialization');
                 
             end
-            
             
             Screen('BeginOpenGL', obj.viewportPtr);
             glShadeModel(obj.GL.FLAT);
@@ -379,6 +399,8 @@ classdef Render
             glLightfv(obj.GL.LIGHT0, obj.GL.DIFFUSE, [ .75 .75 .75 1 ]);
             glLightfv(obj.GL.LIGHT0, obj.GL.AMBIENT, [ .25 .25 .25 1 ]);
             
+            % Set uniforms and attributes, and then render your geometry
+
             if obj.viewPoint == 1
                 
                 glRotatef(90, 0, 1, 0);
@@ -421,98 +443,70 @@ classdef Render
             glRotatef(180, 0, 1, 0);
             glTranslatef(-player.nextPos(1), 0, -player.nextPos(2));
             
-            %             Draw ground
-            glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(3));
-            glBegin(obj.GL.QUADS);
-            glTexCoord2f(0.0, 0.0); glVertex3f(10, 0.0, -10);
-            glTexCoord2f(0.0, 4); glVertex3f(10, 0.0, 10);
-            glTexCoord2f(4, 4); glVertex3f(-10, 0.0, 10);
-            glTexCoord2f(4, 0.0); glVertex3f(-10, 0.0, -10);
-            glEnd;
+            % Draw ground
+            %glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(3));
+            %glBegin(obj.GL.QUADS);
+            %glTexCoord2f(0.0, 0.0); glVertex3f(10, 0.0, -10);
+            %glTexCoord2f(0.0, 4); glVertex3f(10, 0.0, 10);
+            %glTexCoord2f(4, 4); glVertex3f(-10, 0.0, 10);
+            %glTexCoord2f(4, 0.0); glVertex3f(-10, 0.0, -10);
+            %glEnd;
             
-            %             Draw ceiling
+            %   Draw ceiling
             if obj.ceilingFlag
 
-                %Ceiling split into to to accomadate placement of sun image
-                
-                glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(4));
+                % Top
+                glBindTexture(obj.GL.TEXTURE_CUBE_MAP, obj.texNumId(4));
                 glBegin(obj.GL.QUADS);
-                glTexCoord2f(0.0, 0.0); glVertex3f(-10, 4.0, -10);
-                glTexCoord2f(0.0, 4); glVertex3f(-10, 4.0, 10);
-                glTexCoord2f(4, 4); glVertex3f(8, 4.0, 10);
-                glTexCoord2f(4, 0.0); glVertex3f(8, 4.0, -10);
-                glEnd;
-
-                glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(6));
-                glBegin(obj.GL.QUADS);
-                glTexCoord2f(0.0, 0.0); glVertex3f(8, 4.0, -10);
-                glTexCoord2f(0.0, 4); glVertex3f(8, 4.0, 8);
-                glTexCoord2f(4, 4); glVertex3f(10, 4.0, 8);
-                glTexCoord2f(4, 0.0); glVertex3f(10, 4.0, -10);
+                glTexCoord2f(0.0, 0.0); glVertex3f(-10, 6.0, -10);
+                glTexCoord2f(0.0, 1); glVertex3f(-10, 6.0, 10);
+                glTexCoord2f(1, 1); glVertex3f(10, 6.0, 10);
+                glTexCoord2f(1, 0.0); glVertex3f(10, 6.0, -10);
                 glEnd;
 
 
                 %Banki Addition - Sky to ground 4 walls
-                glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(6));
+
+                 % Right sky wall
+                glBindTexture(obj.GL.TEXTURE_CUBE_MAP, obj.texNumId(4));
                 glBegin(obj.GL.QUADS);
-
-                glTexCoord2f(0.0, 0.0); glVertex3f(10, 0.0, 10);
-                glTexCoord2f(0.0, 4); glVertex3f(10, 4.0, 10);
-
-                glTexCoord2f(4, 4); glVertex3f(-10, 4.0, 10);
-                glTexCoord2f(4, 0.0); glVertex3f(-10, 0.0, 10);
-
-                %Second sky wall
-                glTexCoord2f(0.0, 0.0); glVertex3f(-10, 0.0, 10);  
-                glTexCoord2f(0.0, 4); glVertex3f(-10, 4.0, 10);
-
-                glTexCoord2f(4, 4); glVertex3f(-10, 4.0, -10);
-                glTexCoord2f(4, 0.0); glVertex3f(-10, 0.0, -10);
-
-                 %Third sky wall
                 glTexCoord2f(0.0, 0.0); glVertex3f(-10, 0.0, -10);  
-                glTexCoord2f(0.0, 4); glVertex3f(-10, 4.0, -10);
+                glTexCoord2f(0.0, 1); glVertex3f(-10, 6.0, -10);
 
-                glTexCoord2f(4, 4); glVertex3f(10, 4.0, -10);
-                glTexCoord2f(4, 0.0); glVertex3f(10, 0.0, -10);
+                glTexCoord2f(1, 1); glVertex3f(10, 6.0, -10);
+                glTexCoord2f(1, 0.0); glVertex3f(10, 0.0, -10);
+                glEnd;
+                
+                % Left wall
+                glBindTexture(obj.GL.TEXTURE_CUBE_MAP, obj.texNumId(4));
+                glBegin(obj.GL.QUADS);
+                glTexCoord2f(0.0, 0.0); glVertex3f(10, 0.0, 10);
+                glTexCoord2f(0.0, 1); glVertex3f(10, 6.0, 10);
 
-                 %Fourth sky wall
+                glTexCoord2f(1, 1); glVertex3f(-10, 6.0, 10);
+                glTexCoord2f(1, 0.0); glVertex3f(-10, 0.0, 10);
+                glEnd;
+
+                % Back sky wall
+                glBindTexture(obj.GL.TEXTURE_CUBE_MAP, obj.texNumId(4));
+                glBegin(obj.GL.QUADS);
+                glTexCoord2f(0.0, 0.0); glVertex3f(-10, 0.0, 10);  
+                glTexCoord2f(0.0, 1); glVertex3f(-10, 6.0, 10);
+
+                glTexCoord2f(1, 1); glVertex3f(-10, 6.0, -10);
+                glTexCoord2f(1, 0.0); glVertex3f(-10, 0.0, -10);
+                glEnd;
+
+                 % Front sky wall
+                glBindTexture(obj.GL.TEXTURE_CUBE_MAP, obj.texNumId(4));
+                glBegin(obj.GL.QUADS);
                 glTexCoord2f(0.0, 0.0); glVertex3f(10, 0.0, -10);  
-                glTexCoord2f(0.0, 4); glVertex3f(10, 4.0, -10);
+                glTexCoord2f(0.0, 1); glVertex3f(10, 6.0, -10);
 
-                glTexCoord2f(4, 4); glVertex3f(10, 4.0,10);     
-                glTexCoord2f(4, 0.0); glVertex3f(10, 0.0, 10);
+                glTexCoord2f(1, 1); glVertex3f(10, 6.0,10);     
+                glTexCoord2f(1, 0.0); glVertex3f(10, 0.0, 10);
                 glEnd;
-
-                %Sun add-in
-                glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(7));
-                glBegin(obj.GL.QUADS);
-                glTexCoord2f(0.0, 0.0); glVertex3f(10, 4.0, 8);
-                glTexCoord2f(0.0, 4); glVertex3f(10, 4.0, 10);
-                glTexCoord2f(4, 4); glVertex3f(8, 4.0, 10);
-                glTexCoord2f(4, 0.0); glVertex3f(8, 4.0, 8);
-                glEnd;
-                                
-            end
-            
-            if obj.tripwireFlag
-                
-                % Draw tripwires
-                glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(5));
-                glBegin(obj.GL.QUADS);
-                for wallIndex = 1:maze.nTripWires
-                      
-                    thisWall = maze.tripWireArray(wallIndex);
-                    
-                    glTexCoord2f(0.0, 0.0); glVertex3f(thisWall.p1(1), 0.0, thisWall.p1(2));
-                    glTexCoord2f(0.0, 1.0); glVertex3f(thisWall.p1(1), 0.5, thisWall.p1(2));
-                    
-                    glTexCoord2f(thisWall.norm, 1.0); glVertex3f(thisWall.p2(1), 0.5, thisWall.p2(2));
-                    glTexCoord2f(thisWall.norm, 0.0); glVertex3f(thisWall.p2(1), 0.0, thisWall.p2(2));
-                    
-                end
-                glEnd;
-                
+                                                             
             end
             
             % Draw regular walls
@@ -545,13 +539,52 @@ classdef Render
                 
             end
             glEnd;
-            
+
+            if obj.tripwireFlag
+                
+                % Draw tripwires
+                glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(3));
+                glBegin(obj.GL.QUADS);
+                for wallIndex = 1:maze.nTripWires
+                      
+                    thisWall = maze.tripWireArray(wallIndex);
+                    
+                    glTexCoord2f(0.0, 0.0); glVertex3f(thisWall.p1(1), 0.0, thisWall.p1(2));
+                    glTexCoord2f(0.0, 1.0); glVertex3f(thisWall.p1(1), 0.5, thisWall.p1(2));
+                    
+                    glTexCoord2f(thisWall.norm, 1.0); glVertex3f(thisWall.p2(1), 0.5, thisWall.p2(2));
+                    glTexCoord2f(thisWall.norm, 0.0); glVertex3f(thisWall.p2(1), 0.0, thisWall.p2(2));
+                    
+                end
+                glEnd;
+                
+            end
+
+            if obj.distalQueueFlag
+
+                % Number of slices that we wil use on our sphere (higher gives a smoother
+                % surface)
+                numSlices = 1000;
+
+                 % Translate the sphere to the desired location
+                glTranslatef(5, 5, 4);
+
+                % Enable the loaded model texture
+                glEnable(obj.distalQueueTarget);
+
+                %Draw Distall Queue
+                glBindTexture(obj.distalQueueTarget, obj.distalQueueName);
+                theSphere = gluNewQuadric;
+                gluQuadricTexture(theSphere, obj.GL.TRUE);
+                sphereRadius = 1;
+                gluSphere(theSphere, sphereRadius, numSlices, numSlices);
+           end
+       
             glPopMatrix();
             Screen('EndOpenGL', obj.viewportPtr);
-            Screen('Flip', obj.viewportPtr);
+            Screen('Flip', obj.viewportPtr);          
             
         end
-        
         
         function obj = set.perspectiveAngle(obj, PerspectiveAngle)
             
