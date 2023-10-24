@@ -1,6 +1,6 @@
         function MazeExp
         
-       %     %   GUI modifiable parameter      s
+       %     %   GUI modifiable parameters           
     %     p.participantId                 = 0;
     %     p.nBlocks                       = 5;  
     %     p.nPracticeTrials               = 5;     
@@ -29,7 +29,7 @@
     
     p = MazeExpGUI(p);
     
-    if p.isExit           
+    if p.isExit              
         
         error('User abort');
         
@@ -42,7 +42,7 @@
     
     % Path
     p.dataPath                      = 'Data';
-    p.eolPracticeFlag               = 0;
+    p.eolPracticeFlag                 = 0;
     p.initialTourFlag               = 0;
     p.blockPracticeFlag             = 0;
     p.blockTourFlag                 = 0  ;
@@ -57,7 +57,7 @@
         if ~mkdir(p.dataPath)
             
             error('Cannot create directory');
-            
+              
         end
         
     end
@@ -73,7 +73,7 @@
             
             inputDevice = JoystickMac(0.25);
             
-        elseif ispc
+        els   eif ispc
             
             inputDevice = JoystickWin(0.25);
             
@@ -103,7 +103,7 @@
     rating = rating.Load(render);
     
     % Standby
-    standby = Standby;
+    standby =    Standby;
     
     % Standby Big Numbers
     standbyBigNumber = StandbyBigNumber;
@@ -124,7 +124,7 @@
         for trialIndex = 1:schedule.nTrials
        
             % Load maze
-            mazeFileIndex = schedule.trials(trialIndex, Schedule.COL.MAZE_FILE_INDEX  );
+            mazeFileIndex = schedule.trials(trialIndex, Schedule.COL.MAZE_FILE_INDEX   );
             mazeFileName = schedule.mazeFileNames{mazeFileIndex};
             
             maze = Maze(mazeFileName, p.checkCollisionFlag);

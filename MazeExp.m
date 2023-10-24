@@ -1,6 +1,6 @@
         function MazeExp
         
-       %     %   GUI modifiable parameter      s
+       %     %   GUI modifiable parameters              
     %     p.participantId                 = 0;
     %     p.nBlocks                       = 5;  
     %     p.nPracticeTrials               = 5;     
@@ -27,9 +27,9 @@
     mazeExpConfig = MazeExpConfig;
     p = mazeExpConfig.Read();
     
-       p = MazeExpGUI(p);
+    p = MazeExpGUI(p);
     
-    if p.isExit           
+    if p.isExit              
         
         error('User abort');
         
@@ -40,9 +40,9 @@
     % Internal fixed parameters
     p.checkCollisionFlag            = 1;
     
-    %    Path
+    % Path
     p.dataPath                      = 'Data';
-    p.eolPracticeFlag               = 0;
+    p.eolPracticeFlag                 = 0;
     p.initialTourFlag               = 0;
     p.blockPracticeFlag             = 0;
     p.blockTourFlag                 = 0  ;
@@ -57,7 +57,7 @@
         if ~mkdir(p.dataPath)
             
             error('Cannot create directory');
-            
+              
         end
         
     end
@@ -73,7 +73,7 @@
             
             inputDevice = JoystickMac(0.25);
             
-        els eif ispc
+        els   eif ispc
             
             inputDevice = JoystickWin(0.25);
             

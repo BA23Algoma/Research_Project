@@ -18,10 +18,12 @@ classdef Render
         tripwireFlag        = 0;
         nQueue              = 0;
         distalQueueFlag     = 1;
-        QueueName;
-        QueueTarget;
+        DistalQueueName;
+        DistalQueueTarget;
         distalQueueLocation;
-        PerQueueFlag        = 0;
+        PerQueueFlag        = 1;
+        PerQueueName;
+        PerQueueTarget;
    
         distalPerLocation;
     end
@@ -150,7 +152,7 @@ classdef Render
             if obj.viewPoint == 2
                 
                 obj.teapotFlag = 1;
-                obj.ceilingFlag = 1;%was zero banki
+                obj.ceilingFlag = 1; %was zero banki
                 obj.tripwireFlag = 1;
                 
             else
@@ -179,12 +181,17 @@ classdef Render
             obj = obj.AddTextureSkybox(GlTexture(obj.texPath, 'skybox_back.jpg'));
             obj = obj.AddTextureSkybox(GlTexture(obj.texPath, 'skybox_front.jpg'));
             
+
+
             % Distal feature (moon)
             if obj.distalQueueFlag
                 obj = obj.AddTextureDistalQueue('moon.jpg',  obj.viewportPtr);
             end
-            %fprintf('screen Id after buildnig moon is %f\n',  obj.texNumId(texIndex));
 
+            % Periperhal Queue
+            if obj.PerQueueFlag
+                obj = obj.AddTexturePerQueue('moon.jpg',  obj.viewportPtr);
+            end
         end
         
         function obj = OpenPtbWindow(obj)
@@ -351,10 +358,8 @@ classdef Render
             [textureName, targetFront, ~, ~] = Screen('GetOpenGLTexture', window, modelTexture, imh, imw);
             
             %Create global attributes
-            obj.nQueue = obj.nQueue + 1;
-            nQue = obj.nQueue;
-            obj.QueueName(nQue) = textureName;
-            obj.QueueTarget(nQue) = targetFront;
+            obj.DistalQueueName = textureName;
+            obj.DistalQueueTarget = targetFront;
             obj.distalQueueLocation = round(rand() + 1); % Randomly selects between the two text file input locations
             
 
@@ -376,6 +381,47 @@ classdef Render
             % Clamping behaviour shall be a cyclic repeat:
             glTexParameteri(targetFront, obj.GL.TEXTURE_WRAP_S, obj.GL.REPEAT);
             glTexParameteri(targetFront, obj.GL.TEXTURE_WRAP_T, obj.GL.REPEAT);
+                        
+        end
+
+        function obj = AddTexturePerQueue(obj, textFileName, window)
+
+            % Load texture
+            image = imread(textFileName);
+            [s1, ~, ~] = size(image);
+            image = im2double(image(1:s1, 1:s1, :));
+            
+            % Convert to a texture for PTB drawing (orientation needs changing for
+            % rendering)
+            imageFlipped = rot90(flipud(image));
+            modelTexture = Screen('MakeTexture', window, imageFlipped, [], 1, 2);
+            
+            % Get the information we need about the texture
+            [imw, imh] = Screen('WindowSize', modelTexture);
+            [PertextureName, PertargetFront, ~, ~] = Screen('GetOpenGLTexture', window, modelTexture, imh, imw);
+            
+            %Create global attributes
+            obj.PerQueueName = PertextureName;
+            obj.PerQueueTarget = PertargetFront;            
+
+            % Bind our texture and setup filtering to allow nice presentation of our
+            % texture
+            glBindTexture(PertargetFront, PertextureName);
+            glGenerateMipmapEXT(PertargetFront); 
+            
+            glTexParameterf(PertargetFront, obj.GL.TEXTURE_MAG_FILTER, obj.GL.LINEAR);
+            glTexParameterf(PertargetFront, obj.GL.TEXTURE_MIN_FILTER, obj.GL.LINEAR_MIPMAP_LINEAR);
+            
+            % Allow the texture and lighting to interact
+            glTexEnvfv(obj.GL.TEXTURE_ENV, obj.GL.TEXTURE_ENV_MODE, obj.GL.MODULATE);
+            
+            % This gives nice texture rendering without artifacts
+            maxAnisotropy = glGetFloatv(obj.GL.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+            glTexParameterf(PertargetFront, obj.GL.TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy);
+            
+            % Clamping behaviour shall be a cyclic repeat:
+            glTexParameteri(PertargetFront, obj.GL.TEXTURE_WRAP_S, obj.GL.REPEAT);
+            glTexParameteri(PertargetFront, obj.GL.TEXTURE_WRAP_T, obj.GL.REPEAT);
                         
         end
         
@@ -579,19 +625,51 @@ classdef Render
                 % surface)
                 numSlices = 1000;
 
-                % Translate the sphere to the desired location
-                location = obj.distalQueueLocation;
-                glTranslatef(maze.distalQueue.x(location), maze.distalQueue.y(location), 4);
-
                 % Enable the loaded model texture
-                glEnable(obj.QueueTarget(1));
+                glEnable(obj.DistalQueueTarget);
+
+                % Render the sphere with a local translation that's relative to the global translation
+                glPushMatrix;
+
+                 % Translate the sphere to the desired location
+                location = obj.distalQueueLocation;
+                glTranslatef(maze.distalQueue.x(location), 5, maze.distalQueue.y(location));
 
                 %Draw Distall Queue
-                glBindTexture(obj.QueueTarget(1), obj.QueueName(1));
+                glBindTexture(obj.DistalQueueTarget, obj.DistalQueueName);
                 theSphere = gluNewQuadric;
                 gluQuadricTexture(theSphere, obj.GL.TRUE);
                 sphereRadius = 1;
                 gluSphere(theSphere, sphereRadius, numSlices, numSlices);
+
+                % Restore the transformation state
+                glPopMatrix;
+            end
+
+            if obj.PerQueueFlag
+
+                % Number of slices that we wil use on our sphere (higher gives a smoother
+                % surface)
+                numSlices = 1000;
+
+                % Enable the loaded model texture
+                glEnable(obj.PerQueueTarget);
+
+                % Render the sphere with a local translation that's relative to the global translation
+                glPushMatrix;
+
+                % Translate the sphere to the desired location
+                glTranslatef(-2, 0.1, 1);
+
+                %Draw Peripheral Queue
+                glBindTexture(obj.PerQueueTarget, obj.PerQueueName);
+                theSphere = gluNewQuadric;
+                gluQuadricTexture(theSphere, obj.GL.TRUE);
+                sphereRadius = .05;
+                gluSphere(theSphere, sphereRadius, numSlices, numSlices);
+
+                % Restore the transformation state
+                glPopMatrix;
            end
        
             glPopMatrix();
