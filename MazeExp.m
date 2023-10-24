@@ -27,7 +27,7 @@
     mazeExpConfig = MazeExpConfig;
     p = mazeExpConfig.Read();
     
-    p = MazeExpGUI(p);
+       p = MazeExpGUI(p);
     
     if p.isExit           
         

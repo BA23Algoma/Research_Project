@@ -16,9 +16,14 @@ classdef Render
         skybox;
         skyboxFace          = 1;
         tripwireFlag        = 0;
+        nQueue              = 0;
         distalQueueFlag     = 1;
-        distalQueueName;
-        distalQueueTarget;
+        QueueName;
+        QueueTarget;
+        distalQueueLocation;
+        PerQueueFlag        = 0;
+   
+        distalPerLocation;
     end
     
     properties (SetAccess = protected)
@@ -346,8 +351,12 @@ classdef Render
             [textureName, targetFront, ~, ~] = Screen('GetOpenGLTexture', window, modelTexture, imh, imw);
             
             %Create global attributes
-            obj.distalQueueName = textureName;
-            obj.distalQueueTarget = targetFront;
+            obj.nQueue = obj.nQueue + 1;
+            nQue = obj.nQueue;
+            obj.QueueName(nQue) = textureName;
+            obj.QueueTarget(nQue) = targetFront;
+            obj.distalQueueLocation = round(rand() + 1); % Randomly selects between the two text file input locations
+            
 
             % Bind our texture and setup filtering to allow nice presentation of our
             % texture
@@ -462,10 +471,10 @@ classdef Render
                 % Top
                 glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(7));
                 glBegin(obj.GL.QUADS);
-                glTexCoord2f(0.0, 0.0); glVertex3f(-10, 6.0, -10);
-                glTexCoord2f(0.0, 1); glVertex3f(-10, 6.0, 10);
-                glTexCoord2f(1, 1); glVertex3f(10, 6.0, 10);
-                glTexCoord2f(1, 0.0); glVertex3f(10, 6.0, -10);
+                glTexCoord2f(0.0, 0.0); glVertex3f(-13.5, 6.0, -6.5);
+                glTexCoord2f(0.0, 1); glVertex3f(-13.5, 6.0, 13.5);
+                glTexCoord2f(1, 1); glVertex3f(13.5, 6.0, 6.5);
+                glTexCoord2f(1, 0.0); glVertex3f(6.5, 6.0, -6.5);
                 glEnd;
 
 
@@ -474,41 +483,41 @@ classdef Render
                  % Right sky wall
                 glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(5));
                 glBegin(obj.GL.QUADS);
-                glTexCoord2f(0.0, 0.0); glVertex3f(-10, 0.0, -10);  
-                glTexCoord2f(0.0, 1); glVertex3f(-10, 6.0, -10);
+                glTexCoord2f(0.0, 0.0); glVertex3f(-13.5, 0.0, -6.5);  
+                glTexCoord2f(0.0, 1); glVertex3f(-13.5, 6.0, -6.5);
 
-                glTexCoord2f(1, 1); glVertex3f(10, 6.0, -10);
-                glTexCoord2f(1, 0.0); glVertex3f(10, 0.0, -10);
+                glTexCoord2f(1, 1); glVertex3f(6.5, 6.0, -6.5);
+                glTexCoord2f(1, 0.0); glVertex3f(6.5, 0.0, -6.5);
                 glEnd;
                 
                 % Left wall
                 glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(6));
                 glBegin(obj.GL.QUADS);
-                glTexCoord2f(0.0, 0.0); glVertex3f(10, 0.0, 10);
-                glTexCoord2f(0.0, 1); glVertex3f(10, 6.0, 10);
+                glTexCoord2f(0.0, 0.0); glVertex3f(13.5, 0.0, 13.5);
+                glTexCoord2f(0.0, 1); glVertex3f(13.5, 6.0, 13.5);
 
-                glTexCoord2f(1, 1); glVertex3f(-10, 6.0, 10);
-                glTexCoord2f(1, 0.0); glVertex3f(-10, 0.0, 10);
+                glTexCoord2f(1, 1); glVertex3f(-6.5, 6.0, 13.5);
+                glTexCoord2f(1, 0.0); glVertex3f(-6.5, 0.0, 13.5);
                 glEnd;
 
                 % Back sky wall
                 glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(9));
                 glBegin(obj.GL.QUADS);
-                glTexCoord2f(0.0, 0.0); glVertex3f(-10, 0.0, 10);  
-                glTexCoord2f(0.0, 1); glVertex3f(-10, 6.0, 10);
+                glTexCoord2f(0.0, 0.0); glVertex3f(-6.5, 0.0, 13.5);  
+                glTexCoord2f(0.0, 1); glVertex3f(-6.5, 6.0, 13.5);
 
-                glTexCoord2f(1, 1); glVertex3f(-10, 6.0, -10);
-                glTexCoord2f(1, 0.0); glVertex3f(-10, 0.0, -10);
+                glTexCoord2f(1, 1); glVertex3f(-6.5, 6.0, -6.5);
+                glTexCoord2f(1, 0.0); glVertex3f(-6.5, 0.0, -6.5);
                 glEnd;
 
                  % Front sky wall
                 glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(10));
                 glBegin(obj.GL.QUADS);
-                glTexCoord2f(0.0, 0.0); glVertex3f(10, 0.0, -10);  
-                glTexCoord2f(0.0, 1); glVertex3f(10, 6.0, -10);
+                glTexCoord2f(0.0, 0.0); glVertex3f(13.5, 0.0, -6.5);  
+                glTexCoord2f(0.0, 1); glVertex3f(13.5, 6.0, -6.5);
 
-                glTexCoord2f(1, 1); glVertex3f(10, 6.0,10);     
-                glTexCoord2f(1, 0.0); glVertex3f(10, 0.0, 10);
+                glTexCoord2f(1, 1); glVertex3f(13.5, 6.0, 13.5);     
+                glTexCoord2f(1, 0.0); glVertex3f(13.5, 0.0, 13.5);
                 glEnd;
                                                              
             end
@@ -570,15 +579,15 @@ classdef Render
                 % surface)
                 numSlices = 1000;
 
-                 % Translate the sphere to the desired location
-                 location = ;
-                glTranslatef(location.x(2), location.y(2), 4);
+                % Translate the sphere to the desired location
+                location = obj.distalQueueLocation;
+                glTranslatef(maze.distalQueue.x(location), maze.distalQueue.y(location), 4);
 
                 % Enable the loaded model texture
-                glEnable(obj.distalQueueTarget);
+                glEnable(obj.QueueTarget(1));
 
                 %Draw Distall Queue
-                glBindTexture(obj.distalQueueTarget, obj.distalQueueName);
+                glBindTexture(obj.QueueTarget(1), obj.QueueName(1));
                 theSphere = gluNewQuadric;
                 gluQuadricTexture(theSphere, obj.GL.TRUE);
                 sphereRadius = 1;
