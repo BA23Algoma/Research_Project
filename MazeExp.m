@@ -40,7 +40,7 @@
     % Internal fixed parameters
     p.checkCollisionFlag            = 1;
     
-    % Path
+    %    Path
     p.dataPath                      = 'Data';
     p.eolPracticeFlag               = 0;
     p.initialTourFlag               = 0;
@@ -73,7 +73,7 @@
             
             inputDevice = JoystickMac(0.25);
             
-        elseif ispc
+        els eif ispc
             
             inputDevice = JoystickWin(0.25);
             
@@ -103,7 +103,7 @@
     rating = rating.Load(render);
     
     % Standby
-    standby = Standby;
+    standby =    Standby;
     
     % Standby Big Numbers
     standbyBigNumber = StandbyBigNumber;
@@ -124,7 +124,7 @@
         for trialIndex = 1:schedule.nTrials
        
             % Load maze
-            mazeFileIndex = schedule.trials(trialIndex, Schedule.COL.MAZE_FILE_INDEX);
+            mazeFileIndex = schedule.trials(trialIndex, Schedule.COL.MAZE_FILE_INDEX   );
             mazeFileName = schedule.mazeFileNames{mazeFileIndex};
             
             maze = Maze(mazeFileName, p.checkCollisionFlag);

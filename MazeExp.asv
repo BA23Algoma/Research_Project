@@ -1,4 +1,4 @@
-     function MazeExp
+        function MazeExp
         
        %     %   GUI modifiable parameter      s
     %     p.participantId                 = 0;
@@ -13,7 +13,7 @@
     %     p.tourDeltaDegPerFrame          = 3.0;
     %     p.viewPoint                     = 1;
     %     p.frameRate                     = 60      ;
-    %     p.perspectiveAngle              = 45;
+    %     p.perspectiv eAngle              = 45;
     %     p.eyeLevel                      = -0.55;
     %     p.coordPollInterval             = 0.1;
     %     p.coordPollTimeLimit            = 240;
@@ -124,7 +124,7 @@
         for trialIndex = 1:schedule.nTrials
        
             % Load maze
-            mazeFileIndex = schedule.trials(trialIndex, Schedule.COL.MAZE_FILE_INDEX);
+            mazeFileIndex = schedule.trials(trialIndex, Schedule.COL.MAZE_FILE_INDEX  );
             mazeFileName = schedule.mazeFileNames{mazeFileIndex};
             
             maze = Maze(mazeFileName, p.checkCollisionFlag);

@@ -8,6 +8,7 @@ classdef Maze
         normalWallArray;
         targetWallArray;
         tripWireArray;
+        distalQueue;
         
         % Built-in objects
         depth;
@@ -224,7 +225,7 @@ classdef Maze
             obj.filePrefix = MazeFilePrefix(obj);
             
             fid = fopen(fullfile(obj.pathName, obj.fileName), 'rt');
-            
+            fprintf(obj.fileName);
             if (fid ~= -1)
                 
                 s = fgets(fid);
@@ -306,6 +307,14 @@ classdef Maze
                     obj.tripWireArray(tripWireIndex) = thisTripWire;
                     
                 end
+
+                % Distal Queue Locations
+                 s = fgets(fid);
+                 a = sscanf(s, '%f');
+                 obj.distalQueue.x(1) = a(1);
+                 obj.distalQueue.y(1) = a(2);
+                 obj.distalQueue.x(2) = a(3);
+                 obj.distalQueue.y(2) = a(4);
                 
                 fclose(fid);
                 

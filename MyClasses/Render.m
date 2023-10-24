@@ -19,6 +19,7 @@ classdef Render
         distalQueueFlag     = 1;
         distalQueueName;
         distalQueueTarget;
+        distalQueueLocation;
     end
     
     properties (SetAccess = protected)
@@ -348,6 +349,8 @@ classdef Render
             %Create global attributes
             obj.distalQueueName = textureName;
             obj.distalQueueTarget = targetFront;
+            obj.distalQueueLocation = round(rand() + 1); % Randomly selects between the two text file input locations
+
 
             % Bind our texture and setup filtering to allow nice presentation of our
             % texture
@@ -570,8 +573,9 @@ classdef Render
                 % surface)
                 numSlices = 1000;
 
-                 % Translate the sphere to the desired location
-                glTranslatef(5, 5, 4);
+                % Translate the sphere to the desired location
+                location = obj.distalQueueLocation;
+                glTranslatef(maze.distalQueue.x(location), maze.distalQueue.y(location), 4);
 
                 % Enable the loaded model texture
                 glEnable(obj.distalQueueTarget);

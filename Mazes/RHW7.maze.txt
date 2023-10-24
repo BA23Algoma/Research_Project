@@ -21,7 +21,7 @@ ceiling-Tile.bmp
 2.0	3.0	0.0	3.0	
 0.0	2.0	2.0	2.0	
 2.0	5.0	2.0	6.0	
-
+5.0	5.0	-5.0	-5.0
 
 width	depth	trials	walls
 //line is listed as width then depth, for the start and end of line
