@@ -1,19 +1,19 @@
-        function MazeExp
+      b    function MazeExp
         
-       %     %   GUI modifiable parameters              
+    %     %   GUI modifiable parameters              
     %     p.participantId                 = 0;
     %     p.nBlocks                       = 5;  
     %     p.nPracticeTrials               = 5;     
     %     p.tourHand                      = 1;
     %     p.inputDevice                   = 1;
-    %     p.playerBodyRadius              = 0.125  ;
+    %     p.playerBodyRadius              = 0.125;
     %     p.playerDeltaUnitPerFrame       = 0.075;
     %     p.playerDeltaDegPerFrame        = 3.0;
-    %     p.tourDeltaUnitPerFr ame         = 0.075;
-    %     p.tourDeltaDegPerFrame          = 3.0;
+    %     p.tourDeltaUnitPerFr ame        = 0.075;
+    %     p.tourDeltaDegPerFrame          = 3.0;   
     %     p.viewPoint                     = 1;
-    %     p.frameRate                     = 60      ;
-    %     p.perspectiv eAngle              = 45;
+    %     p.frameRate                     = 60;
+    %     p.perspectiv eAngle             = 45;
     %     p.eyeLevel                      = -0.55;
     %     p.coordPollInterval             = 0.1;
     %     p.coordPollTimeLimit            = 240;

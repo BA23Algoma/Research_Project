@@ -233,10 +233,7 @@ classdef Maze
                 obj.width = a(1);
                 obj.depth = a(2);
                 obj.nWalls = a(4);
-                obj.nTripWires = a(5);
-                
-                fgets(fid); % spoil ground file
-                fgets(fid); % spoil ceiling file
+                obj.nTripWires = a(5);       
                 
                 % Walls
                 obj.nNormalWalls = obj.nWalls-3;
@@ -258,7 +255,7 @@ classdef Maze
                     thisWall.p2(1) = -vertices(3);
                     thisWall.p2(2) = vertices(4);
                     
-                    %                     thisWall = thisWall.UpdateWall();
+                    % thisWall = thisWall.UpdateWall();
                     
                     textureStr = strcat(s(nextIndex:end));
                     
@@ -310,11 +307,11 @@ classdef Maze
 
                 % Distal Queue Locations
                  s = fgets(fid);
-                 a = sscanf(s, '%f');
-                 obj.distalQueue.x(1) = a(1);
-                 obj.distalQueue.y(1) = a(2);
-                 obj.distalQueue.x(2) = a(3);
-                 obj.distalQueue.y(2) = a(4);
+                 d = sscanf(s, '%f');
+                 obj.distalQueue.x(1) = d(1);
+                 obj.distalQueue.y(1) = d(2);
+                 obj.distalQueue.x(2) = d(3);
+                 obj.distalQueue.y(2) = d(4);
                 
                 fclose(fid);
                 
