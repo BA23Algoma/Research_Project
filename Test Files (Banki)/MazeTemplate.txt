@@ -1,0 +1,29 @@
+Maze template file
+//The first 6 lines represent the wall features
+//Example
+wall-width  wall-depth  #-of-trials  #-of-walls  #-of-trip wires  hot_spots
+   6		4	     1		 14	       0	      0
+//The next 10 walls represent the outer walls of the maze. Using a top down
+// view of the maze, the 4 values are represents the (x,y) values of two...
+//points used to form a line, which corresponds to the location of the wall. 
+//The image file name is the texture to applied to said wall. Example.
+0.5	0.0	6.0	0.0	Rock.bmp
+6.0	0.0	6.0	5.5	Rock.bmp
+.
+.
+.
+6.5	6.0	6.0	5.5	Cheese.bmp
+
+//Following the 10 walls are the inner wall of the maze, all rock textures.
+//Example (no texture because all are assumed to be rock walls)
+6.0	4.0	3.0	4.0
+
+//After all the walls is the dital queue location, using the same co-ordinate... 
+//system as the walls(x,y). Two locations are given. One is used at random.
+//Example
+5.0	5.0	-5.0	-5.0
+
+//Lastly is the peripehral Queue, same as the distal queue but the two points...
+//Represent two diffirent objects
+  Object 1        Object 2
+5.0	5.0	-5.0	-5.0
