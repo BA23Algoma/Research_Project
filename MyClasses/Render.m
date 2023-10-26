@@ -190,7 +190,7 @@ classdef Render
 
             % Periperhal Queue
             if obj.PerQueueFlag
-                obj = obj.AddTexturePerQueue('moon.jpg',  obj.viewportPtr);
+                obj = obj.AddTexturePerQueue('baseball.jpg',  obj.viewportPtr);
             end
         end
         
@@ -659,13 +659,13 @@ classdef Render
                 glPushMatrix;
 
                 % Translate the sphere to the desired location
-                glTranslatef(-2, 0.1, 1);
+                glTranslatef(-1, 0.05, 3);
 
                 %Draw Peripheral Queue
                 glBindTexture(obj.PerQueueTarget, obj.PerQueueName);
                 theSphere = gluNewQuadric;
                 gluQuadricTexture(theSphere, obj.GL.TRUE);
-                sphereRadius = .05;
+                sphereRadius = .025;
                 gluSphere(theSphere, sphereRadius, numSlices, numSlices);
 
                 % Restore the transformation state

@@ -1,6 +1,6 @@
-      b    function MazeExp
-        
-    %     %   GUI modifiable parameters              
+       function MazeExp                   
+         
+    %     %   GUI modifiable parameters                     
     %     p.participantId                 = 0;
     %     p.nBlocks                       = 5;  
     %     p.nPracticeTrials               = 5;     
@@ -23,7 +23,7 @@
     %add 2007 file to path
     setPath = what('MatlabWindowsFilesR2007a');
     addpath(setPath.path);
-    
+      
     mazeExpConfig = MazeExpConfig;
     p = mazeExpConfig.Read();
     
@@ -37,15 +37,15 @@
     
     p.nowNum = now;  
     
-    % Internal fixed parameters
+    % Internal fixed param  eters
     p.checkCollisionFlag            = 1;
     
     % Path
     p.dataPath                      = 'Data';
-    p.eolPracticeFlag                 = 0;
+    p.eolPracticeFlag               = 0;
     p.initialTourFlag               = 0;
     p.blockPracticeFlag             = 0;
-    p.blockTourFlag                 = 0  ;
+    p.blockTourFlag                 = 0;
     p.blockRunFlag                  = 1;
     
     if (exist(p.dataPath, 'dir')==7)
@@ -73,7 +73,7 @@
             
             inputDevice = JoystickMac(0.25);
             
-        els   eif ispc
+        elseif ispc
             
             inputDevice = JoystickWin(0.25);
             

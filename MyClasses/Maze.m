@@ -29,7 +29,7 @@ classdef Maze
     
     properties (Constant)
         
-        fileNameSuffix      = '.maze.txt';
+        fileNameSuffix      = '.rev.txt';
         
     end
     
@@ -225,15 +225,18 @@ classdef Maze
             obj.filePrefix = MazeFilePrefix(obj);
             
             fid = fopen(fullfile(obj.pathName, obj.fileName), 'rt');
+            fprintf(obj.pathName);
+             fprintf('\n');
             fprintf(obj.fileName);
             if (fid ~= -1)
-                
+
+                fgets(fid); % Skip comment line
                 s = fgets(fid);
                 a = sscanf(s, '%i');
                 obj.width = a(1);
                 obj.depth = a(2);
                 obj.nWalls = a(4);
-                obj.nTripWires = a(5);       
+                obj.nTripWires = a(5);
                 
                 % Walls
                 obj.nNormalWalls = obj.nWalls-3;
@@ -243,7 +246,10 @@ classdef Maze
                 
                 normalWallIndex = 1;
                 targetWallIndex = 1;
+                fgets(fid); % Skip comment line
+
                 for wallIndex = 1:obj.nWalls
+
                     
                     s = fgets(fid);
                     [vertices,~, ~, nextIndex]= sscanf(s, '%f');
@@ -257,8 +263,7 @@ classdef Maze
                     
                     % thisWall = thisWall.UpdateWall();
                     
-                    textureStr = strcat(s(nextIndex:end));
-                    
+                    textureStr = strcat(s(nextIndex:end));                    
                     if strcmp(textureStr, 'Rock.bmp')
                         
                         thisWall.type = 'normal';
@@ -277,7 +282,7 @@ classdef Maze
                         
                         
                     else
-                        
+                     
                         error('Undefined wall string');
                         
                     end
@@ -287,6 +292,8 @@ classdef Maze
                 % Trip Wires
                 obj.tripWireArray = TripWire(obj.nTripWires, 1);
                 
+                fgets(fid); % Skip comment line
+
                 for tripWireIndex = 1:obj.nTripWires
                     
                     s = fgets(fid);
@@ -306,6 +313,8 @@ classdef Maze
                 end
 
                 % Distal Queue Locations
+
+                 fgets(fid); % Skip comment line
                  s = fgets(fid);
                  d = sscanf(s, '%f');
                  obj.distalQueue.x(1) = d(1);

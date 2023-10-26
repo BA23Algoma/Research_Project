@@ -172,7 +172,7 @@ classdef Schedule
                 
                 case 'PRACTICE'
                     
-                    h = dir(fullfile(obj.mazePath, 'P5.maze.txt'));
+                    h = dir(fullfile(obj.mazePath, 'MazeTemplate.txt'));
                     obj.mazeFileNames = {h(:).name};
                     obj.nMazes = numel(h);
                     
@@ -182,42 +182,46 @@ classdef Schedule
                         
                     end
                     
-                    h = dir(fullfile(obj.mazePath, 'P5.tour.txt'));
-                    obj.tourFileNames = {h(:).name};
-                    obj.nTours = numel(h);
+                    % Used for AI tour of maze
+
+                    %h = dir(fullfile(obj.mazePath, 'P5.tour.txt'));
+                    %obj.tourFileNames = {h(:).name};
+                    %obj.nTours = numel(h);
                     
-                    if obj.nTours ~= 1
+                    %if obj.nTours ~= 1
                         
-                        error('Expected number of tours doesn''t match number of actual mazes');
+                        %error('Expected number of tours doesn''t match number of actual mazes');
                         
-                    end
+                    %end
                     
                     
                 case 'EXPERIMENT'
                     
                     h = dir(fullfile(obj.mazePath, strcat('*', Maze.fileNameSuffix)));
-                    practiceIndex = find(strcmp({h(:).name}, 'P5.maze.txt'));
+                    practiceIndex = find(strcmp({h(:).name}, 'MazeTemplate.txt'));
                     fullIndex = 1:numel(h);
                     
                     h = h(setxor(practiceIndex, fullIndex));
                     
                     obj.mazeFileNames = {h(:).name}';
                     obj.nMazes = numel(h);
+
+                     % Used for AI tour of maze
                                         
-                    h = dir(fullfile(obj.mazePath, strcat('*', MazeTour.fileNameSuffix)));
-                    practiceIndex = find(strcmp({h(:).name}, 'P5.tour.txt'));
-                    fullIndex = 1:numel(h);
+                   % h = dir(fullfile(obj.mazePath, strcat('*', MazeTour.fileNameSuffix)));
+                    %practiceIndex = find(strcmp({h(:).name}, 'P5.tour.txt'));
+                    %fullIndex = 1:numel(h);
                     
-                    h = h(setxor(practiceIndex, fullIndex));
+                    %h = h(setxor(practiceIndex, fullIndex));
                     
-                    obj.tourFileNames = {h(:).name}';
-                    obj.nTours = numel(h);
+                    %obj.tourFileNames = {h(:).name}';
+                    %obj.nTours = numel(h);
                     
-                    if obj.nTours ~= obj.nMazes
+                    %if obj.nTours ~= obj.nMazes
                         
-                        error('Number of tours doesn''t match number of mazes');
+                        %error('Number of tours doesn''t match number of mazes');
                         
-                    end
+                    %end
                     
                     
                 otherwise
