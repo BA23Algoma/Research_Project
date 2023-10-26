@@ -1,0 +1,31 @@
+wall-width  wall-depth  #-of-trials  #-of-walls  #-of-trip wires  hot_spots
+    6	        6	     1	         18	       2	      0    
+# Walls (2 points each wall (x,y) form a line)
+0.5	0.0	6.0	0.0	Rock.bmp
+6.0	0.0	6.0	5.5	Rock.bmp
+5.5	6.0	0.0	6.0	Rock.bmp
+0.0	6.0	0.0	0.5	Rock.bmp
+0.0	0.5	-0.5	0.0	Rock.bmp
+-0.5	0.0	0.0	-0.5	Rock.bmp
+0.0	-0.5	0.5	0.0	Rock.bmp
+5.5	6.0	6.0	6.5	Cheese.bmp
+6.0	6.5	6.5	6.0	Cheese.bmp
+6.5	6.0	6.0	5.5	Cheese.bmp
+5.0	6.0	5.0	1.0	Rock.bmp
+4.0	1.0	4.0	0.0	Rock.bmp
+3.0	6.0	3.0	2.0	Rock.bmp
+3.0	2.0	1.0	2.0	Rock.bmp
+1.0 	6.0 	1.0 	3.0	Rock.bmp
+1.0 	1.0 	4.0 	1.0	Rock.bmp
+4.0 	3.0 	4.0 	5.0	Rock.bmp
+4.0 	3.0 	5.0 	3.0	Rock.bmp
+#Trip wire
+0.0	2.0	5.0	2.0
+0.0	3.0	5.0	3.0
+#Distal Queue
+5.0	5.0	-5.0	-5.0
+
+//line is listed as width then depth, for the start and end of line
+//first 10 walls are the default 'open' maze
+
+*-*=new walls
