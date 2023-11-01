@@ -26,6 +26,8 @@ wall-width  wall-depth  #-of-trials  #-of-walls  #-of-trip wires  hot_spots
 4.0	2.0	6.0	2.0
 #Distal Queue
 5.0	5.0	-5.0	-5.0
+#Peripheral Queue - Two objects, (X,Y)
+-1.0	3.0	-2.0	4.0 
 //line is listed as width then depth, for the start and end of line
 //first 10 walls are the default 'open' maze
 

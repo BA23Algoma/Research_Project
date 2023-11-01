@@ -9,6 +9,7 @@ classdef Maze
         targetWallArray;
         tripWireArray;
         distalQueue;
+        perQueue;
         
         % Built-in objects
         depth;
@@ -321,6 +322,16 @@ classdef Maze
                  obj.distalQueue.y(1) = d(2);
                  obj.distalQueue.x(2) = d(3);
                  obj.distalQueue.y(2) = d(4);
+
+                 % Peripheral Queue Locations
+
+                 fgets(fid); % Skip comment line
+                 b = fgets(fid);
+                 l = sscanf(b, '%f');
+                 obj.perQueue.x(1) = l(1);
+                 obj.perQueue.y(1) = l(2);
+                 obj.perQueue.x(2) = l(3);
+                 obj.perQueue.y(2) = l(4);
                 
                 fclose(fid);
                 

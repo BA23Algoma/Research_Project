@@ -191,6 +191,7 @@ classdef Render
             % Periperhal Queue
             if obj.PerQueueFlag
                 obj = obj.AddTexturePerQueue('baseball.jpg',  obj.viewportPtr);
+                obj = obj.AddTextureSkybox(GlTexture(obj.texPath, 'crate_1.jpg'));
             end
         end
         
@@ -659,7 +660,7 @@ classdef Render
                 glPushMatrix;
 
                 % Translate the sphere to the desired location
-                glTranslatef(-1, 0.05, 3);
+                glTranslatef(maze.perQueue.x(1), 0.025, maze.perQueue.y(1));
 
                 %Draw Peripheral Queue
                 glBindTexture(obj.PerQueueTarget, obj.PerQueueName);
@@ -676,57 +677,58 @@ classdef Render
                 % Render the sphere with a local translation that's relative to the global translation
                 glPushMatrix;
 
-                x = -2;
-                y = 0.05;
-                z = 4;
+                x = maze.perQueue.x(2);
+                y = 0.075;
+                z = maze.perQueue.y(1);
+                size = 0.075;
 
                 % Top box
-                glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(2));
+                glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(11));
                 glBegin(obj.GL.QUADS);
-                glTexCoord2f(0.0, 0.0); glVertex3f(x-0.05, 2 * y, z-0.05);
-                glTexCoord2f(0.0, 1); glVertex3f(x-0.05, 2 * y, z+0.05);
-                glTexCoord2f(1, 1); glVertex3f(x+0.05, 2 * y, z+0.05);
-                glTexCoord2f(1, 0.0); glVertex3f(x+0.05, 2 * y, z-0.05);
+                glTexCoord2f(0.0, 0.0); glVertex3f((x - size), (2 * y), (z - size));
+                glTexCoord2f(0.0, 1); glVertex3f((x - size), (2 * y), (z + size));
+                glTexCoord2f(1, 1); glVertex3f((x + size), (2 * y), (z + size));
+                glTexCoord2f(1, 0.0); glVertex3f((x + size), (2 * y), (z - size));
                 glEnd;
 
                  % Right box
-                glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(2));
+                glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(11));
                 glBegin(obj.GL.QUADS);
-                glTexCoord2f(0.0, 0.0); glVertex3f(x-0.05, 0.0, z-0.05);  
-                glTexCoord2f(0.0, 1); glVertex3f(x-0.05, 2 * y, z-0.05);
+                glTexCoord2f(0.0, 0.0); glVertex3f((x - size), 0.0, (z - size));  
+                glTexCoord2f(0.0, 1); glVertex3f((x - size), 2 * y, (z - size));
 
-                glTexCoord2f(1, 1); glVertex3f(x+0.05, 2 * y, z-0.05);
-                glTexCoord2f(1, 0.0); glVertex3f(x+0.05, 0.0, z-0.05);
+                glTexCoord2f(1, 1); glVertex3f((x + size), (2 * y), (z - size));
+                glTexCoord2f(1, 0.0); glVertex3f((x + size), 0.0, (z - size));
                 glEnd;
                 
                 % Left box
-                glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(2));
+                glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(11));
                 glBegin(obj.GL.QUADS);
-                glTexCoord2f(0.0, 0.0); glVertex3f(x+0.05, 0.0, z+0.05);
-                glTexCoord2f(0.0, 1); glVertex3f(x+0.05, 2 * y, z+0.05);
+                glTexCoord2f(0.0, 0.0); glVertex3f((x + size), 0.0, (z + size));
+                glTexCoord2f(0.0, 1); glVertex3f((x + size), (2 * y), (z + size));
 
-                glTexCoord2f(1, 1); glVertex3f(x-0.05, 2 * y, z+0.05);
-                glTexCoord2f(1, 0.0); glVertex3f(x-0.05, 0.0, z+0.05);
+                glTexCoord2f(1, 1); glVertex3f((x - size), (2 * y), (z + size));
+                glTexCoord2f(1, 0.0); glVertex3f((x - size), 0.0, (z + size));
                 glEnd;
 
                 % Back box
-                glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(2));
+                glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(11));
                 glBegin(obj.GL.QUADS);
-                glTexCoord2f(0.0, 0.0); glVertex3f(x-0.05, 0.0, z+0.05);  
-                glTexCoord2f(0.0, 1); glVertex3f(x-0.05, 2 * y, z+0.05);
+                glTexCoord2f(0.0, 0.0); glVertex3f((x - size), 0.0, (z + size));  
+                glTexCoord2f(0.0, 1); glVertex3f((x - size), 2 * y, (z + size));
 
-                glTexCoord2f(1, 1); glVertex3f(x-0.05, 2 * y, z-0.05);
-                glTexCoord2f(1, 0.0); glVertex3f(x-0.05, 0.0, z-0.05);
+                glTexCoord2f(1, 1); glVertex3f((x - size), (2 * y), (z - size));
+                glTexCoord2f(1, 0.0); glVertex3f((x - size), 0.0, (z - size));
                 glEnd;
 
                  % Front box
-                glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(2));
+                glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(11));
                 glBegin(obj.GL.QUADS);
-                glTexCoord2f(0.0, 0.0); glVertex3f(x+0.05, 0.0, z-0.05);  
-                glTexCoord2f(0.0, 1); glVertex3f(x+0.05, 2 * y, z-0.05);
+                glTexCoord2f(0.0, 0.0); glVertex3f((x + size), 0.0, (z - size));  
+                glTexCoord2f(0.0, 1); glVertex3f((x + size), (2 * y), (z - size));
 
-                glTexCoord2f(1, 1); glVertex3f(x+0.05, 2 * y, z+0.05);     
-                glTexCoord2f(1, 0.0); glVertex3f(x+0.05, 0.0, z+0.05);
+                glTexCoord2f(1, 1); glVertex3f((x + size), (2 * y), (z + size));     
+                glTexCoord2f(1, 0.0); glVertex3f((x + size), 0.0, (z + size));
                 glEnd;
 
                  % Restore the transformation state
