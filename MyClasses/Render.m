@@ -116,7 +116,7 @@ classdef Render
             % screen.
             screenNumber = max(screensCheck);
             %obj.screenId = screenNumber;
-            obj.screenId = 0;
+            obj.screenId = screenNumber;
             
             % Encapsulate and protect AGL, GL, and GLU constants
             
@@ -153,7 +153,7 @@ classdef Render
                 
                 obj.teapotFlag = 1;
                 obj.ceilingFlag = 1; %was zero banki
-                obj.tripwireFlag = 1;
+                obj.tripwireFlag = 0;
                 
             else
                 
@@ -467,7 +467,7 @@ classdef Render
                 
             elseif obj.viewPoint == 2
                 
-                glTranslatef(0, 0, -5);
+                glTranslatef(0, 0, -6);
                 glRotatef(90, 1, 0, 0);
                 
             end
@@ -639,7 +639,7 @@ classdef Render
                 glBindTexture(obj.DistalQueueTarget, obj.DistalQueueName);
                 theSphere = gluNewQuadric;
                 gluQuadricTexture(theSphere, obj.GL.TRUE);
-                sphereRadius = 1;
+                sphereRadius = 0.5;
                 gluSphere(theSphere, sphereRadius, numSlices, numSlices);
 
                 % Restore the transformation state

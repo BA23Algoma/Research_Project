@@ -1,9 +1,9 @@
 wall-width  wall-depth  #-of-trials  #-of-walls  #-of-trip wires  hot_spots
      6		 6	     1		  19		5	     0
 # Walls (2 points for each wall (x,y) form a line)
-0.5	0.0	6.0	0.0	Rock.bmp
+0.5	0.0	5.5	0.0	Rock.bmp
 6.0	0.5	6.0	6.0	Rock.bmp
-6.0	6.0	0.0	5.5	Rock.bmp
+6.0	6.0	0.0	6.0	Rock.bmp
 0.0	6.0	0.0	0.5	Rock.bmp
 0.0	0.5	-0.5	0.0	Rock.bmp
 -0.5	0.0	0.0	-0.5	Rock.bmp
