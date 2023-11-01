@@ -670,6 +670,67 @@ classdef Render
 
                 % Restore the transformation state
                 glPopMatrix;
+
+                %----Second peripheral queue, crate box-------
+                
+                % Render the sphere with a local translation that's relative to the global translation
+                glPushMatrix;
+
+                x = -2;
+                y = 0.05;
+                z = 4;
+
+                % Top box
+                glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(2));
+                glBegin(obj.GL.QUADS);
+                glTexCoord2f(0.0, 0.0); glVertex3f(x-0.05, 2 * y, z-0.05);
+                glTexCoord2f(0.0, 1); glVertex3f(x-0.05, 2 * y, z+0.05);
+                glTexCoord2f(1, 1); glVertex3f(x+0.05, 2 * y, z+0.05);
+                glTexCoord2f(1, 0.0); glVertex3f(x+0.05, 2 * y, z-0.05);
+                glEnd;
+
+                 % Right box
+                glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(2));
+                glBegin(obj.GL.QUADS);
+                glTexCoord2f(0.0, 0.0); glVertex3f(x-0.05, 0.0, z-0.05);  
+                glTexCoord2f(0.0, 1); glVertex3f(x-0.05, 2 * y, z-0.05);
+
+                glTexCoord2f(1, 1); glVertex3f(x+0.05, 2 * y, z-0.05);
+                glTexCoord2f(1, 0.0); glVertex3f(x+0.05, 0.0, z-0.05);
+                glEnd;
+                
+                % Left box
+                glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(2));
+                glBegin(obj.GL.QUADS);
+                glTexCoord2f(0.0, 0.0); glVertex3f(x+0.05, 0.0, z+0.05);
+                glTexCoord2f(0.0, 1); glVertex3f(x+0.05, 2 * y, z+0.05);
+
+                glTexCoord2f(1, 1); glVertex3f(x-0.05, 2 * y, z+0.05);
+                glTexCoord2f(1, 0.0); glVertex3f(x-0.05, 0.0, z+0.05);
+                glEnd;
+
+                % Back box
+                glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(2));
+                glBegin(obj.GL.QUADS);
+                glTexCoord2f(0.0, 0.0); glVertex3f(x-0.05, 0.0, z+0.05);  
+                glTexCoord2f(0.0, 1); glVertex3f(x-0.05, 2 * y, z+0.05);
+
+                glTexCoord2f(1, 1); glVertex3f(x-0.05, 2 * y, z-0.05);
+                glTexCoord2f(1, 0.0); glVertex3f(x-0.05, 0.0, z-0.05);
+                glEnd;
+
+                 % Front box
+                glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(2));
+                glBegin(obj.GL.QUADS);
+                glTexCoord2f(0.0, 0.0); glVertex3f(x+0.05, 0.0, z-0.05);  
+                glTexCoord2f(0.0, 1); glVertex3f(x+0.05, 2 * y, z-0.05);
+
+                glTexCoord2f(1, 1); glVertex3f(x+0.05, 2 * y, z+0.05);     
+                glTexCoord2f(1, 0.0); glVertex3f(x+0.05, 0.0, z+0.05);
+                glEnd;
+
+                 % Restore the transformation state
+                glPopMatrix;
            end
        
             glPopMatrix();
