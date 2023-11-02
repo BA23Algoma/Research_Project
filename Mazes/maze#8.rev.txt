@@ -24,9 +24,14 @@ wall-width  wall-depth  #-of-trials  #-of-walls  #-of-trip wires  hot_spots
 0.0	3.0	2.0	3.0
 4.0	3.0	6.0	3.0
 4.0	2.0	6.0	2.0
+*0.0    2.0     2.0     2.0 
+1.0     6.0     1.0     5.0
+2.0     4.0     3.0     4.0 
+5.0     5.0     5.0     4.5*
+
 #Distal Queue
 5.0	5.0	-5.0	-5.0
 //line is listed as width then depth, for the start and end of line
 //first 10 walls are the default 'open' maze
 
-*-*=new walls
+*-*=new trip wires 
