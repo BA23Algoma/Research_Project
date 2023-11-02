@@ -1,6 +1,6 @@
-                   function MazeExp                      
-               
-    %     %   GU I modifiable parameters                     
+          function MazeExp                   
+         
+    %     %   GUI modifiable parameters                     
     %     p.participantId                 = 0;
     %     p.nBlocks                       = 5;  
     %     p.nPracticeTrials               = 5;     
@@ -65,7 +65,7 @@
     % Input device (hack for now)
     if p.inputDevice == 1
         
-          inputDevice = Keyboard();
+        inputDevice = Keyboard();
         
     elseif p.inputDevice == 2
         
@@ -81,7 +81,7 @@
             
             error('Invalid platform (not Mac and not PC)');
             
-           end
+        end
         
     else
         
@@ -124,11 +124,11 @@
         for trialIndex = 1:schedule.nTrials
        
             % Load maze
-               mazeFileIndex = schedule.trials(trialIndex, Schedule.COL.MAZE_FILE_INDEX   );
+            mazeFileIndex = schedule.trials(trialIndex, Schedule.COL.MAZE_FILE_INDEX   );
             mazeFileName = schedule.mazeFileNames{mazeFileIndex};
             
             maze = Maze(mazeFileName, p.checkCollisionFlag);
-              
+            
             standby.ShowStandby(render, inputDevice, 'Get Ready for Practice Tour', 'Hit SPACE BAR when ready.');
             
             % Maze tour
@@ -161,7 +161,7 @@
             % Maze tour
             mazeTour = MazeTour(maze.FilePrefix, tourHand, maze.pathName, p.tourDeltaDegPerFrame, p.tourDeltaUnitPerFrame);
             
-               standby.ShowStandby(render, inputDevice, 'Get Ready For Maze Tour', 'Hit SPACE BAR when ready.');
+            standby.ShowStandby(render, inputDevice, 'Get Ready For Maze Tour', 'Hit SPACE BAR when ready.');
             
             maze.Tour(mazeTour, render, player, inputDevice);
             
@@ -173,7 +173,7 @@
         
         message1Str = 'You may take a short break.';
         message2Str = 'Please stay seated and do not disturb others.';
-        message3Str = 'Hit SPACE BAR to begin next phase.';   
+        message3Str = 'Hit SPACE BAR to begin next phase.';
         standby.ShowStandby(render, inputDevice, message1Str, message2Str, message3Str);
         
     end
@@ -186,7 +186,7 @@
         
         schedule = Schedule(p.participantId, 'PRACTICE', p.nPracticeTrials, p.tourHand);
         
-          splashScreen.ShowSplashScreen(render, inputDevice, 'Instructions3.jpg', 'Textures');
+        splashScreen.ShowSplashScreen(render, inputDevice, 'Instructions3.jpg', 'Textures');
         
         for trialIndex = 1:schedule.nTrials
             
@@ -234,7 +234,7 @@
             for labelIndex = 1:expSchedule.nMazesPerBlock
                 
                 trialIndex = labelIndex + (blockIndex-1) * expSchedule.nMazesPerBlock;
-                   
+                
                 % Load maze        
                 mazeFileIndex = expSchedule.trials(trialIndex, Schedule.COL.MAZE_FILE_INDEX);
                 mazeFileName = expSchedule.mazeFileNames{mazeFileIndex};
@@ -251,7 +251,7 @@
                 mazeTour = MazeTour(maze.FilePrefix, p.tourHand, maze.pathName, p.tourDeltaDegPerFrame, p.tourDeltaUnitPerFrame);
                 maze.Tour(mazeTour, render, player, inputDevice);
                 
-                WaitSecs (.25);
+                WaitSecs(.25);
                 jolRating = rating.RatingSelect(render, inputDevice, 'JOL');
                 expSchedule.trials(trialIndex, Schedule.COL.JOL_RATING) = jolRating;
                 
