@@ -191,7 +191,7 @@ classdef Render
             % Periperhal Queue
             if obj.PerQueueFlag
                 obj = obj.AddTexturePerQueue('baseball.jpg',  obj.viewportPtr);
-                obj = obj.AddTextureSkybox(GlTexture(obj.texPath, 'crate_1.jpg'));
+                obj = obj.AddTextureSkybox(GlTexture(obj.texPath, 'crate01.jpg'));
             end
         end
         
