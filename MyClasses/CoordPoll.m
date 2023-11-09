@@ -102,7 +102,7 @@ classdef CoordPoll
             
            fileName = strcat(num2str(participantId), '.', mazeFilePrefix, '.', tourHandStr, obj.fileNameSuffix);
            
-                       % Save header
+            % Save header
             if ~exist(fullfile(dataPath, fileName),'file')
             
                 fid = fopen( fullfile(dataPath, fileName), 'at');

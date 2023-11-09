@@ -1,23 +1,23 @@
-          function MazeExp                   
-         
-    %     %   GUI modifiable parameters                     
-    %     p.participantId                 = 0;
+     function  MazeExp                   
+                                                               
+    %     %      GUI modifiable paramete   rs                                 
+    %        p.participantId                 = 0;      
     %     p.nBlocks                       = 5;  
-    %     p.nPracticeTrials               = 5;     
+    %     p.nPracticeTrials               = 5;        
     %     p.tourHand                      = 1;
-    %     p.inputDevice                   = 1;
+    %     p.inputDevice                      = 1;
     %     p.playerBodyRadius              = 0.125;
     %     p.playerDeltaUnitPerFrame       = 0.075;
-    %     p.playerDeltaDegPerFrame        = 3.0;
+    %     p.playerDeltaDegPerFrame        = 3.0;       
     %     p.tourDeltaUnitPerFr ame        = 0.075;
-    %     p.tourDeltaDegPerFrame          = 3.0;   
+    %        p.tourDeltaDegPerFrame          = 3.0;   
     %     p.viewPoint                     = 1;
     %     p.frameRate                     = 60;
     %     p.perspectiv eAngle             = 45;
     %     p.eyeLevel                      = -0.55;
     %     p.coordPollInterval             = 0.1;
     %     p.coordPollTimeLimit            = 240;
-    
+       
     Randomizer();
 
     %add 2007 file to path
@@ -56,21 +56,21 @@
         
         if ~mkdir(p.dataPath)
             
-            error('Cannot create directory');
+               error('Cannot create directory');
               
         end
-        
+          
     end
     
     % Input device (hack for now)
     if p.inputDevice == 1
-        
+            
         inputDevice = Keyboard();
         
     elseif p.inputDevice == 2
         
         if ismac
-            
+              
             inputDevice = JoystickMac(0.25);
             
         elseif ispc
@@ -84,14 +84,14 @@
         end
         
     else
-        
+          
         error('Unknown input device');
         
     end
     
-    % Player
+    %   Player
     player = Player(p.playerBodyRadius, p.playerDeltaDegPerFrame, p.playerDeltaUnitPerFrame);
-    
+       
     % Render
     render = Render([p.screenWidth p.screenHeight p.frameRate]);
     render = render.InitMazeWindow(p.perspectiveAngle, p.eyeLevel, p.viewPoint);

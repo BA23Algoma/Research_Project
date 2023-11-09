@@ -15,15 +15,15 @@ wall-width  wall-depth  #-of-trials  #-of-walls  #-of-trip wires  hot_spots
 6.5	6.0	6.0	5.5	Cheese.bmp
 
 //Following the 10 walls are the inner wall of the maze, all rock textures.
-//After which the following walls are the locations of the trip wires...
-//They follow the same format as the wall parameters
+//Example (no texture because all are assumed to be rock walls)
+6.0	4.0	3.0	4.0
 
-//After the trip wores is the dital queue location, using the same co-ordinate... 
+//After all the walls is the dital queue location, using the same co-ordinate... 
 //system as the walls(x,y). Two locations are given. One is used at random.
 //Example
 5.0	5.0	-5.0	-5.0
 
 //Lastly is the peripehral Queue, same as the distal queue but the two points...
-//represent two diffirent objects
+//Represent two diffirent objects
   Object 1        Object 2
 5.0	5.0	-5.0	-5.0

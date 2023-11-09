@@ -126,7 +126,6 @@ modelTexture = Screen('MakeTexture', window, imageFlipped);
 % texture
 glBindTexture(targetFront, textureName);
 glGenerateMipmapEXT(targetFront); 
-
 glTexParameterf(targetFront, GL.TEXTURE_MAG_FILTER, GL.LINEAR);
 glTexParameterf(targetFront, GL.TEXTURE_MIN_FILTER, GL.LINEAR_MIPMAP_LINEAR);
 

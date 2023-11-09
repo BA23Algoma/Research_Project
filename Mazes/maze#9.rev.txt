@@ -1,9 +1,9 @@
 wall-width  wall-depth  #-of-trials  #-of-walls  #-of-trip wires  hot_spots
-    6	        6	     1	         20	       5	      0    
+    6	        6	     1	         20	       9	      0    
 # Walls (2 points each wall (x,y) form a line)
-0.5	0.0	6.0	0.0	Rock.bmp
-6.0	0.0	6.0	6.0	Rock.bmp
-6.0	6.0	0.0	5.5	Rock.bmp
+0.5	0.0	5.5	0.0	Rock.bmp
+6.0	0.5	6.0	6.0	Rock.bmp
+6.0	6.0	0.0	6.0	Rock.bmp
 0.0	6.0	0.0	0.5	Rock.bmp
 0.0	0.5	-0.5	0.0	Rock.bmp
 -0.5	0.0	0.0	-0.5	Rock.bmp
@@ -22,11 +22,15 @@ wall-width  wall-depth  #-of-trials  #-of-walls  #-of-trip wires  hot_spots
 4.0	1.0	4.0	2.0 	Rock.bmp
 5.0	1.0	5.0	2.0	Rock.bmp
 #Trip wire
-2.0	2.0	2.0	0.0
 3.0	2.0	3.0	0.0
 0.0	3.0	3.0	3.0
-0.0	4.0	5.0	4.0
-5.0	2.0	6.0	2.0
+0.0	4.0	2.0	4.0
+4.0    4.0     5.0     4.0 
+2.0     6.0     2.0     5.0 
+3.0     5.0     3.0     4.0
+4.0     4.0     4.0     3.0
+5.0     3.0     5.0     2.0
+5.0     5.0     6.0     5.0
 #Distal Queue
 5.0	5.0	-5.0	-5.0
 #Peripheral Queue - Two objects, (X,Y)
@@ -36,4 +40,4 @@ wall-width  wall-depth  #-of-trials  #-of-walls  #-of-trip wires  hot_spots
 
 ~=shift x1 to x0
 
-* to *= new walls 
+* to *= new trip wires 

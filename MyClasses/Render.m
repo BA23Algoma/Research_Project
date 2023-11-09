@@ -5,6 +5,7 @@ classdef Render
         multiSampleFrames   = 1;
         texPath             = 'Textures';
         soundPath           = 'Sounds';
+        objPath             = 'Objects\OBJ Textures';
         screenAspectRatio;
         screenId;
         isPtbWindowOk       = 0;
@@ -17,14 +18,14 @@ classdef Render
         skyboxFace          = 1;
         tripwireFlag        = 0;
         nQueue              = 0;
-        distalQueueFlag     = 1;
-        DistalQueueName;
-        DistalQueueTarget;
-        distalQueueLocation;
-        PerQueueFlag        = 1;
-        PerQueueName;
-        PerQueueTarget;
-   
+        distalCueFlag     = 1;
+        DistalCueName;
+        DistalCueTarget;
+        distalCueLocation;
+        PerCueFlag        = 1;
+        PerCueName;
+        PerCueTarget;
+        CueProperties;
         distalPerLocation;
     end
     
@@ -184,14 +185,21 @@ classdef Render
 
 
             % Distal feature (moon)
-            if obj.distalQueueFlag
+            if obj.distalCueFlag
                 obj = obj.AddTextureDistalQueue('moon.jpg',  obj.viewportPtr);
             end
 
             % Periperhal Queue
-            if obj.PerQueueFlag
+            if obj.PerCueFlag
+                %obj = obj.AddTexturePerQueue('Bench LP_DefaultMaterial_BaseColor.png',  obj.viewportPtr);
                 obj = obj.AddTexturePerQueue('baseball.jpg',  obj.viewportPtr);
-                obj = obj.AddTextureSkybox(GlTexture(obj.texPath, 'crate01.jpg'));
+                obj = obj.AddTextureSkybox(GlTexture(obj.texPath, 'crate_1.jpg'));
+                % load object
+                obj.CueProperties = LoadOBJFile('Reseach Project Objects v1.obj');
+                obj.CueProperties = AddNormalsToOBJ(obj.CueProperties);
+                disp(obj.CueProperties);
+                disp(size((obj.CueProperties{1}.faces), 2));
+                obj = obj.AddTexture(GlTexture(obj.objPath, 'bench_brown.jpg'));
             end
         end
         
@@ -359,9 +367,9 @@ classdef Render
             [textureName, targetFront, ~, ~] = Screen('GetOpenGLTexture', window, modelTexture, imh, imw);
             
             %Create global attributes
-            obj.DistalQueueName = textureName;
-            obj.DistalQueueTarget = targetFront;
-            obj.distalQueueLocation = round(rand() + 1); % Randomly selects between the two text file input locations
+            obj.DistalCueName = textureName;
+            obj.DistalCueTarget = targetFront;
+            obj.distalCueLocation = round(rand() + 1); % Randomly selects between the two text file input locations
             
 
             % Bind our texture and setup filtering to allow nice presentation of our
@@ -402,8 +410,8 @@ classdef Render
             [PertextureName, PertargetFront, ~, ~] = Screen('GetOpenGLTexture', window, modelTexture, imh, imw);
             
             %Create global attributes
-            obj.PerQueueName = PertextureName;
-            obj.PerQueueTarget = PertargetFront;            
+            obj.PerCueName = PertextureName;
+            obj.PerCueTarget = PertargetFront;            
 
             % Bind our texture and setup filtering to allow nice presentation of our
             % texture
@@ -620,24 +628,24 @@ classdef Render
                 
             end
 
-            if obj.distalQueueFlag
+            if obj.distalCueFlag
 
                 % Number of slices that we wil use on our sphere (higher gives a smoother
                 % surface)
                 numSlices = 1000;
 
                 % Enable the loaded model texture
-                glEnable(obj.DistalQueueTarget);
+                glEnable(obj.DistalCueTarget);
 
                 % Render the sphere with a local translation that's relative to the global translation
                 glPushMatrix;
 
                  % Translate the sphere to the desired location
-                location = obj.distalQueueLocation;
+                location = obj.distalCueLocation;
                 glTranslatef(maze.distalQueue.x(location), 5, maze.distalQueue.y(location));
 
                 %Draw Distall Queue
-                glBindTexture(obj.DistalQueueTarget, obj.DistalQueueName);
+                glBindTexture(obj.DistalCueTarget, obj.DistalCueName);
                 theSphere = gluNewQuadric;
                 gluQuadricTexture(theSphere, obj.GL.TRUE);
                 sphereRadius = 0.5;
@@ -647,14 +655,14 @@ classdef Render
                 glPopMatrix;
             end
 
-            if obj.PerQueueFlag
+            if obj.PerCueFlag
 
                 % Number of slices that we wil use on our sphere (higher gives a smoother
                 % surface)
                 numSlices = 1000;
 
                 % Enable the loaded model texture
-                glEnable(obj.PerQueueTarget);
+                glEnable(obj.PerCueTarget);
 
                 % Render the sphere with a local translation that's relative to the global translation
                 glPushMatrix;
@@ -663,7 +671,7 @@ classdef Render
                 glTranslatef(maze.perQueue.x(1), 0.025, maze.perQueue.y(1));
 
                 %Draw Peripheral Queue
-                glBindTexture(obj.PerQueueTarget, obj.PerQueueName);
+                glBindTexture(obj.PerCueTarget, obj.PerCueName);
                 theSphere = gluNewQuadric;
                 gluQuadricTexture(theSphere, obj.GL.TRUE);
                 sphereRadius = .025;
@@ -733,6 +741,45 @@ classdef Render
 
                  % Restore the transformation state
                 glPopMatrix;
+
+                %----Loaded Object peripheral cue-------
+                
+                % Render the sphere with a local translation that's relative to the global translation
+                 glPushMatrix;
+                 
+                 glTranslatef(-1, 0, 2);
+                 
+                 for i = 1:numel(obj.CueProperties{1}.faces(1,:))
+                 
+                     glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(12));
+                 
+                     if numel(obj.CueProperties{1}.faces(:, 1)) == 3
+                         glBegin(obj.GL.TRIANGLES);
+                     else
+                         glBegin(obj.GL.QUADS);
+                     end
+                 
+                     for j = 1:numel(obj.CueProperties{1}.faces(:, 1))
+                 
+                         vertexIndex = obj.CueProperties{1}.faces(j, i) + 1;
+                         scale = 0.3;
+                 
+                        if vertexIndex > 0 && vertexIndex <= numel(obj.CueProperties{1}.vertices(1,:))
+                            glNormal3fv(obj.CueProperties{1}.normals(:, vertexIndex));
+                            glTexCoord2fv(obj.CueProperties{1}.texcoords(:, vertexIndex));
+                            glVertex3fv(obj.CueProperties{1}.vertices(:, vertexIndex) * scale);
+                        else
+                            fprintf('Invalid vertex index: %d\n', vertexIndex);
+                        end
+                     end
+                     glEnd();
+                 end
+                 
+                 % Restore the transformation state
+                 glPopMatrix;
+
+                %----Loaded Object peripheral cue-------
+
            end
        
             glPopMatrix();
@@ -761,7 +808,7 @@ classdef Render
         
         function Close()
             
-            %             ListenChar(0);
+            % ListenChar(0);
             ShowCursor;
             Screen('CloseAll');
             error('User aborted');
