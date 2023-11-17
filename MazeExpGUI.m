@@ -22,8 +22,8 @@ function varargout = MazeExpGUI(varargin)
     
     % Edit the above text to modify the response to help MazeExpGUI
     
-    % Last Modified by GUIDE v2.5 31-Aug-2023 17:39:30
-    
+    % Last Modified by GUIDE v2.5 09-Nov-2023 20:30:00
+
     % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
     gui_State = struct('gui_Name',       mfilename, ...
@@ -35,7 +35,7 @@ function varargout = MazeExpGUI(varargin)
     if nargin && ischar(varargin{1})
         gui_State.gui_Callback = str2func(varargin{1});
     end
-    
+
     if nargout
         [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
     else
@@ -59,8 +59,10 @@ function MazeExpGUI_OpeningFcn(hObject, eventdata, handles, varargin)
     %     handles.output = hObject;
     
     p = varargin{1};
-    handles.p = p;
-    
+    %handles.p = p;
+    %disp(handles);
+    %disp(handles.p);
+
     set(handles.participantId,      'string', num2str(p.participantId));
     set(handles.avatarLinearVel,    'string', num2str(p.playerDeltaUnitPerFrame));
     set(handles.avatarRadialVel,    'string', num2str(p.playerDeltaDegPerFrame));
@@ -76,7 +78,8 @@ function MazeExpGUI_OpeningFcn(hObject, eventdata, handles, varargin)
     set(handles.coordPollTimeLimit, 'string', num2str(p.coordPollTimeLimit));
     set(handles.screenWidth,        'string', num2str(p.screenWidth));
     set(handles.screenHeight,       'string', num2str(p.screenHeight));
-    
+    set(handles.practiceTime,       'string', num2str(p.praticePollTimeLimit));
+
     if p.tourHand == 1
         
         set(handles.tourHand, 'SelectedObject', handles.leftHandTourButton);
@@ -124,6 +127,22 @@ function MazeExpGUI_OpeningFcn(hObject, eventdata, handles, varargin)
         error('Unknown input device button');
         
     end
+
+    if p.cue == 0
+        
+        set(handles.cue, 'SelectedObject', handles.distalButton);
+        handles.cue = 0;
+        
+    elseif p.cue == 1
+        
+        set(handles.cue, 'SelectedObject', handles.distalAndProximalButton);
+        handles.cue = 1;
+        
+    else
+        
+        error('Unknown cue setup');
+        
+    end
     
     handles.isExit = 1;
     
@@ -143,7 +162,6 @@ function varargout = MazeExpGUI_OutputFcn(hObject, eventdata, handles)
     % handles    structure with handles and user data (see GUIDATA)
     
     % Get default command line output from handles structure
-    
     if ~isempty(handles)
         p.participantId                 = str2double(get(handles.participantId, 'string'));
         p.playerDeltaUnitPerFrame       = str2double(get(handles.avatarLinearVel, 'string'));
@@ -160,14 +178,34 @@ function varargout = MazeExpGUI_OutputFcn(hObject, eventdata, handles)
         p.coordPollTimeLimit            = str2double(get(handles.coordPollTimeLimit, 'string'));
         p.screenWidth                   = str2double(get(handles.screenWidth, 'string'));
         p.screenHeight                  = str2double(get(handles.screenHeight, 'string'));
+        p.praticePollTimeLimit          = str2double(get(handles.practiceTime, 'string'));
         
         p.inputDevice                   = handles.inputDevice;
         p.tourHand                      = handles.tourHand;
         p.viewPoint                     = handles.viewPoint;
+        p.cue                           = handles.cue;
+        p.mazeRunFile                   = get(handles.mazeSelect,'Value');
+
+        % Maze type selection
+        type = get(handles.mazeRunType,'Value');
+        if type == 1
+            a = [1 0 0];
+        elseif type == 2
+            a = [0 1 0];
+        elseif type == 3
+            a = [0 0 1];
+        else
+            a = [0 0 0];
+        end
+
+        p.pracRun                       = a(1);
+        p.AITour                        = a(2);
+        p.singleMaze                    = a(3);
+
         p.isExit                        = handles.isExit;                
-        
         varargout{1} = p;
         
+
     else
         
         p.isExit = 1;
@@ -204,7 +242,6 @@ function startButton_Callback(hObject, eventdata, handles)
     handles.isExit = 0;
     guidata(hObject, handles);
     MazeExpGUI_CloseRequestFcn(handles.MazeExpGUI, eventdata, handles);
-    
     
 end
 
@@ -771,7 +808,6 @@ function inputDevice_ButtonDownFcn(hObject, eventdata, handles)
     % eventdata  reserved - to be defined in a future version of MATLAB
     % handles    structure with handles and user data (see GUIDATA)
     
-    
 end
 
 
@@ -929,4 +965,127 @@ function screenHeight_CreateFcn(hObject, eventdata, handles)
         set(hObject,'BackgroundColor','white');
     end
     
+end
+
+
+
+function practiceTime_Callback(hObject, eventdata, handles)
+% hObject    handle to practiceTime (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of practiceTime as text
+%        str2double(get(hObject,'String')) returns contents of practiceTime as a double
+
+ objectValue = str2double(get(hObject, 'string'));
+    
+    if isnan(objectValue)
+        
+        errordlg('Input must be a number','Error');
+        set(hObject, 'string', num2str(handles.p.praticePollTimeLimit));
+        
+    else
+        
+        set(hObject, 'string', num2str(objectValue));
+        
+    end
+    
+end
+
+
+% --- Executes during object creation, after setting all properties.
+function practiceTime_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to practiceTime (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
+end
+
+
+% --- Executes on selection change in mazeRunType.
+function mazeRunType_Callback(hObject, eventdata, handles)
+% hObject    handle to mazeRunType (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns mazeRunType contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from mazeRunType
+
+end
+
+% --- Executes during object creation, after setting all properties.
+function mazeRunType_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to mazeRunType (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
+end
+
+
+
+% --- Executes on key press with focus on mazeRunType and none of its controls.
+function mazeRunType_KeyPressFcn(hObject, eventdata, handles)
+% hObject    handle to mazeRunType (see GCBO)
+% eventdata  structure with the following fields (see MATLAB.UI.CONTROL.UICONTROL)
+%	Key: name of the key that was pressed, in lower case
+%	Character: character interpretation of the key(s) that was pressed
+%	Modifier: name(s) of the modifier key(s) (i.e., control, shift) pressed
+% handles    structure with handles and user data (see GUIDATA)
+
+end
+
+
+% --- Executes on selection change in mazeSelect.
+function mazeSelect_Callback(hObject, eventdata, handles)
+% hObject    handle to mazeSelect (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns mazeSelect contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from mazeSelect
+%
+% maze_number = gets(handles.mazeSelect, 'value');
+end
+
+% --- Executes during object creation, after setting all properties.
+function mazeSelect_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to mazeSelect (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
+end
+
+
+% --- Executes when selected object is changed in cue.
+function cue_SelectionChangedFcn(hObject, eventdata, handles)
+% hObject    handle to the selected object in cue 
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    switch get(eventdata.NewValue,'Tag') % Get Tag of selected object.
+            
+        case 'distalButton'
+            
+            handles.cue = 0;
+            
+        case 'distalAndProximalButton'
+            
+            handles.cue = 1;
+            
+    end
+    guidata(hObject, handles);
 end

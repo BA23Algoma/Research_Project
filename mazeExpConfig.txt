@@ -1,5 +1,5 @@
 0		% participantId
-5		% nBlocks
+1		% nBlocks
 1		% nPracticeTrials
 1		% tourHand (1 = LEFT HAND; 2 = RIGHT HAND)
 1		% inputDevice (1 = KEYBOARD; 2 = JOYSTICK)
@@ -16,3 +16,8 @@
 240.000000	% coordPollTimeLimit
 800		% screenWidth
 600		% screenHeight
+60.000000	% praticePollTimeLimit
+1		% CUE (0 = DISTAL; 1 = DISTAL & PROXIMAL)
+1       % pracRun
+0		% AITour
+0		% singleMaze

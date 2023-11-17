@@ -4,7 +4,7 @@ classdef MazeExpConfig
         
         % GUI modifiable parameters
         participantId                 = 0;
-        nBlocks                       = 5;
+        nBlocks                       = 1;
         nPracticeTrials               = 1;
         tourHand                      = 1;
         inputDevice                   = 1;
@@ -21,7 +21,11 @@ classdef MazeExpConfig
         coordPollTimeLimit            = 240;
         screenWidth                   = 800;
         screenHeight                  = 600;
-        
+        praticePollTimeLimit          = 60;
+        cue                           = 1;
+        pracRun                       = 1;
+        aiTour                        = 0;
+        singleMaze                    = 0;
     end
     
     properties (Constant)
@@ -46,6 +50,11 @@ classdef MazeExpConfig
             'coordPollTimeLimit',...
             'screenWidth',...
             'screenHeight'...
+            'praticePollTimeLimit',...
+            'cue',...
+            'pracRun',...
+            'AITour',...
+            'singleMaze',...
             };
         
     end
@@ -75,7 +84,14 @@ classdef MazeExpConfig
                 fprintf(fid, '%f\t%s\n', obj.coordPollTimeLimit, strcat('% coordPollTimeLimit'));
                 fprintf(fid, '%i\t\t%s\n', obj.screenWidth, strcat('% screenWidth'));
                 fprintf(fid, '%i\t\t%s\n', obj.screenHeight, strcat('% screenHeight'));
-                
+                fprintf(fid, '%f\t%s\n', obj.praticePollTimeLimit, strcat('% praticePollTimeLimit'));
+                fprintf(fid, '%f\t%s\n', obj.cue, strcat('% cue'));
+                fprintf(fid, '%f\t%s\n', obj.pracRun, strcat('% pracRun'));
+                fprintf(fid, '%f\t%s\n', obj.AITour, strcat('% AITour'));
+                fprintf(fid, '%f\t%s\n', obj.singleMaze, strcat('% singleMaze'));
+                fprintf(fid, '%f\t%s\n', obj.select, strcat('% singleMaze'));
+
+
             else
                 
                 error('Cannot open mazeExpConfig.txt');
