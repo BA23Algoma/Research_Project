@@ -1,0 +1,13 @@
+# Blender 3.6.5 MTL File: 'None'
+# www.blender.org
+
+newmtl fireplace
+Ka 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+map_Kd C:/Users/olude/Downloads/fireplace-low-poly/source/fireplace/fireplace/textures/fireplace_Albedo.png
+map_Ks C:/Users/olude/Downloads/fireplace-low-poly/source/fireplace/fireplace/textures/fireplace_Metallic.png
+map_Ns C:/Users/olude/Downloads/fireplace-low-poly/source/fireplace/fireplace/textures/fireplace_Roughness.png
+map_d C:/Users/olude/Downloads/fireplace-low-poly/source/fireplace/fireplace/textures/fireplace_Albedo.png
+map_Bump -bm 0.300000 C:/Users/olude/Downloads/fireplace-low-poly/source/fireplace/fireplace/textures/fireplace_Normal.png

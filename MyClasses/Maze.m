@@ -8,8 +8,8 @@ classdef Maze
         normalWallArray;
         targetWallArray;
         tripWireArray;
-        distalQueue;
-        perQueue;
+        distalCue;
+        perCue;
         
         % Built-in objects
         depth;
@@ -318,24 +318,42 @@ classdef Maze
                  fgets(fid); % Skip comment line
                  s = fgets(fid);
                  d = sscanf(s, '%f');
-                 obj.distalQueue.x(1) = d(1);
-                 obj.distalQueue.y(1) = d(2);
-                 obj.distalQueue.x(2) = d(3);
-                 obj.distalQueue.y(2) = d(4);
+                 obj.distalCue.x(1) = d(1);
+                 obj.distalCue.y(1) = d(2);
+                 obj.distalCue.x(2) = d(3);
+                 obj.distalCue.y(2) = d(4);
 
                  % Peripheral Queue Locations
 
+                 % Peripheral Cue 1
                  fgets(fid); % Skip comment line
                  b = fgets(fid);
-                 l = sscanf(b, '%f');
-                 obj.perQueue.x(1) = l(1);
-                 obj.perQueue.y(1) = l(2);
-                 obj.perQueue.x(2) = l(3);
-                 obj.perQueue.y(2) = l(4);
+                 [cue,~, ~, nextIndex]= sscanf(b, '%f');
+                 obj.perCue.x(1) = cue(1);
+                 obj.perCue.y(1) = cue(2);
+                 obj.perCue.scale(1) = cue(3);
+
+                 objStr = strcat(b(nextIndex:end));
+                 objStrCue = split(objStr);
+                 obj.perCue.obj = objStrCue{1};
+                 obj.perCue.tex = objStrCue{2};
+
+                 %Peripheral Cue 2
+                 fgets(fid); % Skip comment line
+                 c = fgets(fid);
+                 [cue,~, ~, nextIndex]= sscanf(c, '%f');
+                 obj.perCue.x(2) = cue(1);
+                 obj.perCue.y(2) = cue(2);
+                 obj.perCue.scale(2) = cue(3);
+
+                 objStr = strcat(c(nextIndex:end));
+                 objStrCue = split(objStr);
+                 obj.perCue.objTwo = objStrCue{1};
+                 obj.perCue.texTwo = objStrCue{2};
                 
                 fclose(fid);
                 
-%                 obj = VectorizeWalls(obj);
+                %obj = VectorizeWalls(obj);
                 
                 obj.isLoaded = 1;
                 

@@ -29,7 +29,9 @@ wall-width  wall-depth  #-of-trials  #-of-walls  #-of-trip wires  hot_spots
 1.0 	4.0 	0.0 	4.0
 #Distal Queue
 5.0	5.0	-5.0	-5.0
-#Peripheral Queue - Two objects, (X,Y)
--1.0	3.0	-2.0	4.0 
+#Peripheral Queue - 1, (X,Y, Scale, OBJ File, Texture)
+-1.0	1.0	0.1	Anchor.obj Anchor.png
+#Peripheral Queue - 2, (X,Y, Scale, OBJ File, Texture)
+-1.0	2.0	0.1	CanStew.obj CanStew.png
 //line is listed as width then depth, for the start and end of line
 //first 10 walls are the default 'open' maze

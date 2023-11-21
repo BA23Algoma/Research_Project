@@ -1,27 +1,27 @@
-     function  MazeExp                   
-                                                                 
-    %     %      GUI modifiable parameters                                 
-    %     p.participantId                 = 0;      
+     function  MazeExp                       
+                                                                   
+     %     %      GUI modifiable parameters                                  
+    %     p .participantId                 = 0;      
     %     p.nBlocks                       = 5;  
-    %     p.nPracticeTrials               = 5;        
-    %     p.tourHand                      = 1;
-    %     p.inputDevice                      = 1;
-    %     p.playerBodyRadius              = 0.125;
-    %     p.playerDeltaUnitPerFrame       = 0.075;
-    %         p.playerDeltaDegPerFrame        = 3.0;       
+    %     p.nPracticeTrials                = 5;            
+    %     p.tourHand                       = 1;
+    %     p.inputDevice                   = 1;    
+    %     p.playerBodyRadius              = 0.125; 
+    %     p.playerDeltaUnitPerFrame       = 0.075; 
+    %     p.playerDeltaDegPer Frame        = 3.0;        
     %     p.tourDeltaUnitPerFr ame        = 0.075;
-    %     p.tourDeltaDegPerFrame          = 3.0;   
-    %     p.viewPoint                     = 1;    
-    %     p.frameRate                       = 60;    
+    %     p.tourDeltaDegPerFrame          = 3.0;    
+    %      p.viewPoint                      = 1; 
+    %     p.frameRate                     = 60;
     %     p.perspectiv eAngle             = 45;
-    %     p.eyeLevel                      = -0.55;
-    %     p.coordPollInterval             = 0.1;
+     %     p.eyeLevel                      = -0.55;
+    %     p.coo rdPollInterval             = 0.1; 
     %     p.coordPollTimeLimit            = 240;
-    %     p.praticePollTimeLimit          = 60;
+     %     p.praticePollTimeLimit          = 60;
     %     p.cue                           = 1; % Proximal
        
     Randomizer();
-
+ 
     %add 2007 file to path
     setPath = what('MatlabWindowsFilesR2007a');
     addpath(setPath.path);
@@ -32,14 +32,14 @@
     
     if p.isExit              
         
-        error('User abort');
+           error('U ser abort');
         
     end
     
     p.nowNum = now;  
     
     % Internal fixed param  eters
-       p.checkCollisionFlag            = 1;
+    p.checkCollisionFlag            = 1;
     
     % Path
     p.dataPath                      = 'Data';
@@ -53,12 +53,12 @@
     % p.aiTour                        = 0; 
     % p.pracRun                       = 1;
     % p.singleMaze                    = 1;
-    
+     
     if (exist(p.dataPath, 'dir')==7)
         
         %         do nothing
         
-        else
+    else
         
         if ~mkdir(p.dataPath)
             
@@ -78,7 +78,7 @@
         if ismac
               
             inputDevice = JoystickMac(0.25);
-               
+                
         elseif ispc
             
             inputDevice = JoystickWin(0.25);
@@ -121,13 +121,16 @@
     % Pre-PHASE 1 (SELECT MAZE RUN)
     if p.singleMaze
 
-        preExp = Schedule(p.participantId, 'EXPERIMENT', p.nBlocks, p.tourHand);
+        preExp = Schedule(p.participantId, 'EXPERIMENT', p.nBlocks, p.tourHand); 
         splashScreen.ShowSplashScreen(render, inputDevice, 'Instructions1.jpg', 'Textures'); 
 
-        % Load maze
+        % Load maze 
         mazeFileIndex = p.mazeRunFile;
         mazeFileName = preExp.mazeFileNames{mazeFileIndex};
         maze = Maze(mazeFileName, p.checkCollisionFlag); 
+
+        % Load Peripheral cues 
+        render = render.loadPerCue('Objects\OBJ Textures', maze.perCue.obj, maze.perCue.tex, maze.perCue.objTwo, maze.perCue.texTwo);
 
         maze.Explore(render, player, inputDevice, p.praticePollTimeLimit, p.coordPollInterval, p.nowNum);
 
@@ -141,11 +144,11 @@
         splashScreen.ShowSplashScreen(render, inputDevice, 'Instructions1.jpg', 'Textures');
         
         schedule = Schedule(p.participantId, 'PRACTICE', p.nPracticeTrials, p.tourHand);
-        
+         
         for trialIndex = 1:schedule.nTrials
        
             % Load maze
-            mazeFileIndex = schedule.trials(trialIndex, Schedule.COL.MAZE_FILE_INDEX);
+             mazeFileIndex = schedule.trials(trialIndex, Schedule.COL.MAZE_FILE_INDEX);
             mazeFileName = schedule.mazeFileNames{mazeFileIndex};
             
             maze = Maze(mazeFileName, p.checkCollisionFlag);
@@ -161,11 +164,11 @@
             
         end
         
-    end
-    
+    end 
+     
     % -----------------------
     % PHASE 2 (EXPERIMENT EOL)
-    
+     
     expSchedule = Schedule(p.participantId, 'EXPERIMENT', p.nBlocks, p.tourHand);
     
     if p.initialTourFlag
@@ -256,8 +259,8 @@
                   
                 trialIndex = labelIndex + (blockIndex-1) * expSchedule.nMazesPerBlock;
                 
-                % Load maze        
-                     mazeFileIndex = expSchedule.trials(trialIndex, Schedule.COL.MAZE_FILE_INDEX);
+                % Load maze         
+                mazeFileIndex = expSchedule.trials(trialIndex, Schedule.COL.MAZE_FILE_INDEX);
                 mazeFileName = expSchedule.mazeFileNames{mazeFileIndex};
                     
                 maze = Maze(mazeFileName, p.checkCollisionFlag);
@@ -269,7 +272,7 @@
                     standbyBigNumber.ShowStandbyBigNumber(render, inputDevice, 'Get Ready For Maze Tour:', labelIndex, 'Hit SPACE BAR when ready.');
                     
                 end
-                   mazeTour = MazeTour(maze.FilePrefix, p.tourHand, maze.pathName, p.tourDeltaDegPerFrame, p.tourDeltaUnitPerFrame);
+                mazeTour = MazeTour(maze.FilePrefix, p.tourHand, maze.pathName, p.tourDeltaDegPerFrame, p.tourDeltaUnitPerFrame);
                 maze.Tour(mazeTour, render, player, inputDevice);
                 
                 WaitSecs(    .25);
@@ -321,7 +324,7 @@
                 expSchedule.trials(trialIndex, Schedule.COL.DELTA_TIME) = stats(1);
                 expSchedule.trials(trialIndex, Schedule.COL.N_ERRORS) = stats(2);
                 
-                WaitSecs(.25);                                    
+                WaitSecs(.25);        
                 rcjRating = rating.RatingSelect(render, inputDevice, 'RCJ');
                 expSchedule.trials(trialIndex, Schedule.COL.RCJ_RATING) = rcjRating;
                                 

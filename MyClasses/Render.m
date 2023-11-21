@@ -5,7 +5,6 @@ classdef Render
         multiSampleFrames   = 1;
         texPath             = 'Textures';
         soundPath           = 'Sounds';
-        objPath             = 'Objects\OBJ Textures';
         screenAspectRatio;
         screenId;
         isPtbWindowOk       = 0;
@@ -22,11 +21,9 @@ classdef Render
         DistalCueName;
         DistalCueTarget;
         distalCueLocation;
-        proxCueFlag         = 0;
-        proxCueName;
-        proxCueTarget;
-        cueProperties;
-        distalPerLocation;
+        perCueFlag         = 0;
+        cueOneProperties;
+        cueTwoProperties;
     end
     
     properties (SetAccess = protected)
@@ -164,7 +161,7 @@ classdef Render
 
             if nargin > 3
                 
-               obj.proxCueFlag  = varargin{4};
+               obj.perCueFlag  = varargin{4};
                 
             end
             
@@ -188,26 +185,11 @@ classdef Render
             obj = obj.AddTextureSkybox(GlTexture(obj.texPath, 'skybox_back.jpg'));
             obj = obj.AddTextureSkybox(GlTexture(obj.texPath, 'skybox_front.jpg'));
             
-
-
             % Distal feature (moon)
             if obj.distalCueFlag
-                obj = obj.AddTextureDistalQueue('moon.jpg',  obj.viewportPtr);
+                obj = obj.AddTextureDistalCue('moon.jpg',  obj.viewportPtr);
             end
 
-            % Periperhal Queue
-            if obj.proxCueFlag
-                %obj = obj.AddTexturePerQueue('Bench LP_DefaultMaterial_BaseColor.png',  obj.viewportPtr);
-                %obj = obj.AddTexturePerQueue('baseball.jpg',  obj.viewportPtr);
-                %obj = obj.AddTextureSkybox(GlTexture(obj.texPath, 'crate_1.jpg'));
-                % load object
-                obj.cueProperties = LoadOBJFile('wet_floor_sign.obj');
-                %disp(obj.cueProperties);
-                obj.cueProperties = AddNormalsToOBJ(obj.cueProperties);
-                %disp(obj.cueProperties);
-                %disp(size((obj.cueProperties{1}.faces), 2));
-                obj = obj.AddTexture(GlTexture(obj.objPath, 'wet_floor_sign_.png'));
-            end
         end
         
         function obj = OpenPtbWindow(obj)
@@ -267,7 +249,7 @@ classdef Render
             end
             
             [windowPtr, windowRect] = Screen('OpenWindow', obj.screenId, 0);
-            %             [windowPtr, windowRect] = Screen('OpenWindow', obj.screenId, 0, [], [], [], 0, obj.multiSampleFrames);
+            % [windowPtr, windowRect] = Screen('OpenWindow', obj.screenId, 0, [], [], [], 0, obj.multiSampleFrames);
             obj.viewportPtr = windowPtr;
             obj.viewportRect = windowRect;
             [X0, Y0] = RectCenter(windowRect);
@@ -357,7 +339,7 @@ classdef Render
             
         end
      
-        function obj = AddTextureDistalQueue(obj, textFileName, window)
+        function obj = AddTextureDistalCue(obj, textFileName, window)
 
             % Load texture
             image = imread(textFileName);
@@ -400,45 +382,23 @@ classdef Render
                         
         end
 
-        function obj = AddTexturePerQueue(obj, textFileName, window)
+        function obj = loadPerCue(obj, objTexPath, objFile, objTex, objFileTwo, objTexTwo)
+             % Periperhal Queue
+            if obj.perCueFlag
+                %obj = obj.AddTexturePerQueue('Bench LP_DefaultMaterial_BaseColor.png',  obj.viewportPtr);
+                %obj = obj.AddTexturePerQueue('baseball.jpg',  obj.viewportPtr);
+                %obj = obj.AddTextureSkybox(GlTexture(obj.texPath, 'crate_1.jpg'));
+                % load object
+                obj.cueOneProperties = LoadOBJFileV2(objFile);
+                obj.cueTwoProperties = LoadOBJFileV2(objFileTwo);
 
-            % Load texture
-            image = imread(textFileName);
-            [s1, ~, ~] = size(image);
-            image = im2double(image(1:s1, 1:s1, :));
-            
-            % Convert to a texture for PTB drawing (orientation needs changing for
-            % rendering)
-            imageFlipped = rot90(flipud(image));
-            modelTexture = Screen('MakeTexture', window, imageFlipped, [], 1, 2);
-            
-            % Get the information we need about the texture
-            [imw, imh] = Screen('WindowSize', modelTexture);
-            [PertextureName, PertargetFront, ~, ~] = Screen('GetOpenGLTexture', window, modelTexture, imh, imw);
-            
-            %Create global attributes
-            obj.proxCueName = PertextureName;
-            obj.proxCueTarget = PertargetFront;            
-
-            % Bind our texture and setup filtering to allow nice presentation of our
-            % texture
-            glBindTexture(PertargetFront, PertextureName);
-            glGenerateMipmapEXT(PertargetFront); 
-            
-            glTexParameterf(PertargetFront, obj.GL.TEXTURE_MAG_FILTER, obj.GL.LINEAR);
-            glTexParameterf(PertargetFront, obj.GL.TEXTURE_MIN_FILTER, obj.GL.LINEAR_MIPMAP_LINEAR);
-            
-            % Allow the texture and lighting to interact
-            glTexEnvfv(obj.GL.TEXTURE_ENV, obj.GL.TEXTURE_ENV_MODE, obj.GL.MODULATE);
-            
-            % This gives nice texture rendering without artifacts
-            maxAnisotropy = glGetFloatv(obj.GL.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
-            glTexParameterf(PertargetFront, obj.GL.TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy);
-            
-            % Clamping behaviour shall be a cyclic repeat:
-            glTexParameteri(PertargetFront, obj.GL.TEXTURE_WRAP_S, obj.GL.REPEAT);
-            glTexParameteri(PertargetFront, obj.GL.TEXTURE_WRAP_T, obj.GL.REPEAT);
-                        
+                %disp(obj.cueProperties);
+                %obj.cueProperties = AddNormalsToOBJ(obj.cueProperties);
+                %disp(obj.cueProperties);
+                %disp(size((obj.cueProperties{1}.faces), 2));
+                obj = obj.AddTexture(GlTexture(objTexPath, objTex));
+                obj = obj.AddTexture(GlTexture(objTexPath, objTexTwo));
+            end
         end
         
         function obj = InitOpenGl(obj)
@@ -649,7 +609,7 @@ classdef Render
 
                  % Translate the sphere to the desired location
                 location = obj.distalCueLocation;
-                glTranslatef(maze.distalQueue.x(location), 5, maze.distalQueue.y(location));
+                glTranslatef(maze.distalCue.x(location), 5, maze.distalCue.y(location));
 
                 %Draw Distall Queue
                 glBindTexture(obj.DistalCueTarget, obj.DistalCueName);
@@ -662,183 +622,142 @@ classdef Render
                 glPopMatrix;
             end
 
-            if obj.proxCueFlag
-                %----------------------------------OLD------------------------------------------------%
+            if obj.perCueFlag
 
-                % % Number of slices that we wil use on our sphere (higher gives a smoother
-                % % surface)
-                % numSlices = 1000;
-                % 
-                % % Enable the loaded model texture
-                % glEnable(obj.proxCueTarget);
-                % 
-                % % Render the sphere with a local translation that's relative to the global translation
-                % glPushMatrix;
-                % 
-                % % Translate the sphere to the desired location
-                % glTranslatef(maze.perQueue.x(1), 0.025, maze.perQueue.y(1));
-                % 
-                % %Draw Peripheral Queue
-                % glBindTexture(obj.proxCueTarget, obj.proxCueName);
-                % theSphere = gluNewQuadric;
-                % gluQuadricTexture(theSphere, obj.GL.TRUE);
-                % sphereRadius = .025;
-                % gluSphere(theSphere, sphereRadius, numSlices, numSlices);
-                % 
-                % % Restore the transformation state
-                % glPopMatrix;
-                % 
-                % %----Second peripheral queue, crate box-------
-                % 
-                % % Render the sphere with a local translation that's relative to the global translation
-                % glPushMatrix;
-                % 
-                % x = maze.perQueue.x(2);
-                % y = 0.075;
-                % z = maze.perQueue.y(1);
-                % size = 0.075;
-                % 
-                % % Top box
-                % glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(11));
-                % glBegin(obj.GL.QUADS);
-                % glTexCoord2f(0.0, 0.0); glVertex3f((x - size), (2 * y), (z - size));
-                % glTexCoord2f(0.0, 1); glVertex3f((x - size), (2 * y), (z + size));
-                % glTexCoord2f(1, 1); glVertex3f((x + size), (2 * y), (z + size));
-                % glTexCoord2f(1, 0.0); glVertex3f((x + size), (2 * y), (z - size));
-                % glEnd;
-                % 
-                %  % Right box
-                % glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(11));
-                % glBegin(obj.GL.QUADS);
-                % glTexCoord2f(0.0, 0.0); glVertex3f((x - size), 0.0, (z - size));  
-                % glTexCoord2f(0.0, 1); glVertex3f((x - size), 2 * y, (z - size));
-                % 
-                % glTexCoord2f(1, 1); glVertex3f((x + size), (2 * y), (z - size));
-                % glTexCoord2f(1, 0.0); glVertex3f((x + size), 0.0, (z - size));
-                % glEnd;
-                % 
-                % % Left box
-                % glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(11));
-                % glBegin(obj.GL.QUADS);
-                % glTexCoord2f(0.0, 0.0); glVertex3f((x + size), 0.0, (z + size));
-                % glTexCoord2f(0.0, 1); glVertex3f((x + size), (2 * y), (z + size));
-                % 
-                % glTexCoord2f(1, 1); glVertex3f((x - size), (2 * y), (z + size));
-                % glTexCoord2f(1, 0.0); glVertex3f((x - size), 0.0, (z + size));
-                % glEnd;
-                % 
-                % % Back box
-                % glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(11));
-                % glBegin(obj.GL.QUADS);
-                % glTexCoord2f(0.0, 0.0); glVertex3f((x - size), 0.0, (z + size));  
-                % glTexCoord2f(0.0, 1); glVertex3f((x - size), 2 * y, (z + size));
-                % 
-                % glTexCoord2f(1, 1); glVertex3f((x - size), (2 * y), (z - size));
-                % glTexCoord2f(1, 0.0); glVertex3f((x - size), 0.0, (z - size));
-                % glEnd;
-                % 
-                %  % Front box
-                % glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(11));
-                % glBegin(obj.GL.QUADS);
-                % glTexCoord2f(0.0, 0.0); glVertex3f((x + size), 0.0, (z - size));  
-                % glTexCoord2f(0.0, 1); glVertex3f((x + size), (2 * y), (z - size));
-                % 
-                % glTexCoord2f(1, 1); glVertex3f((x + size), (2 * y), (z + size));     
-                % glTexCoord2f(1, 0.0); glVertex3f((x + size), 0.0, (z + size));
-                % glEnd;
-                % 
-                %  % Restore the transformation state
-                % glPopMatrix;
-
-                %----------------------------------OLD------------------------------------------------%
-
-                %----Loaded Object peripheral cue-------
+                %----------------------------------First QUE------------------------------------------------%
                 
-                % Render the sphere with a local translation that's relative to the global translation
                  glPushMatrix;
 
-                % Initialize local transformation matrix as an identity matrix
-                obj.cueProperties{1}.localTransform = eye(4);
-                 
-                 glTranslatef(-1, 0, 2);
+                 %----Loaded Object peripheral cue-------
+                 obj = obj.renderPerCue(obj.cueOneProperties{1}, maze.perCue.x(1), maze.perCue.y(1), maze.perCue.scale(1), obj.texNumId(11));
 
-                 glBindTexture(obj.GL.TEXTURE_2D, obj.texNumId(11))
-                 
-                 for i = 1:numel(obj.cueProperties{1}.faces(1,:))
-                 
-                     if numel(obj.cueProperties{1}.faces(:, 1)) == 3
-                         glBegin(obj.GL.TRIANGLES);
-                     else
-                         glBegin(obj.GL.QUADS);
-                     end
-                 
-                     for j = 1:numel(obj.cueProperties{1}.faces(:, 1))
-                 
-                         vertexIndex = obj.cueProperties{1}.faces(j, i) + 1;
-                         scale = 0.1;
-                 
-                        if vertexIndex > 0 && vertexIndex <= numel(obj.cueProperties{1}.vertices(1,:))
-                            glNormal3fv(obj.cueProperties{1}.normals(:, vertexIndex));
+                 %------------BoundedBox Setup----------------
+                 obj = obj.boundBoxInitialize(obj.cueOneProperties{1}, maze.perCue.x(1), maze.perCue.y(1), maze.perCue.scale(1), obj.perspectiveAngle, 1/obj.screenAspectRatio);
 
-                            if ~isempty(obj.cueProperties{1}.texcoords)
-                               glTexCoord2fv(obj.cueProperties{1}.texcoords(:, vertexIndex));
-                            end 
-
-                            %glTexCoord2fv(obj.cueProperties{1}.texcoords(:, vertexIndex));
-                            glVertex3fv(obj.cueProperties{1}.vertices(:, vertexIndex) * scale);
-                        else
-                            fprintf('Invalid vertex index: %d\n', vertexIndex);
-                        end
-                     end
-                     glEnd();
-                 end
-                 
-                 % Restore the transformation state
                  glPopMatrix;
 
-                %----Loaded Object peripheral cue-------
 
-                %------------BoundedBox Setup----------------
-
-                glPushMatrix;
-
-                % Accumulate translation
-                translationVector = [-1, 0, 2];
-                translationMatrix = makehgtform('translate', translationVector);
-                obj.cueProperties{1}.localTransform = obj.cueProperties{1}.localTransform * translationMatrix;
-
-                % Assume obj is your 3D object structure with fields like cueProperties, localTransform, etc.
-                vertices = obj.cueProperties{1}.vertices * 0.1;
-
-                % Set up the perspective projection matrix
-                projectionMatrix = perspectiveProjectionMatrix(obj.perspectiveAngle, 1/obj.screenAspectRatio, 0.08, 20.0);
-
-                %Global Transform
-                globaltranslationVector = [-player.nextPos(1), 0, -player.nextPos(2)];
-                rotationAngles = [0, 0, 0]; % Angles in degrees
+                %----------------------------------Second QUE------------------------------------------------%
                 
-                % Create translation matrix
-                T = eye(4);
-                T(1:3, 4) = globaltranslationVector;
+                  glPushMatrix;
+                 
+                  %----Loaded Object peripheral cue-------
+                  obj = obj.renderPerCue(obj.cueTwoProperties{1}, maze.perCue.x(2), maze.perCue.y(2), maze.perCue.scale(2), obj.texNumId(12));
+                 
+                  %------------BoundedBox Setup----------------
+                  obj = obj.boundBoxInitialize(obj.cueTwoProperties{1}, maze.perCue.x(2), maze.perCue.y(2), maze.perCue.scale(2), obj.perspectiveAngle, 1/obj.screenAspectRatio);
+                 
+                 glPopMatrix;
+           end
+       
+            glPopMatrix();
+            Screen('EndOpenGL', obj.viewportPtr);
+            Screen('Flip', obj.viewportPtr);          
+            
+        end
+
+
+        
+        function obj = set.perspectiveAngle(obj, PerspectiveAngle)
+            
+            if isnumeric(PerspectiveAngle) && (PerspectiveAngle >= 0) && (PerspectiveAngle <= 180)
                 
-                % Create rotation matrix (assuming rotation is around the origin)
-                R = euler2rotmat(rotationAngles);
+                obj.perspectiveAngle = PerspectiveAngle;
+                
+            else
+                
+                error('Perspective angle must be >=0 and <= 180');
+                
+            end
+            
+        end
 
-                % Combine translation and rotation
-                globalTransform = T * R;
+        function obj = renderPerCue(obj, perCue, perCueX, perCueY, perScale, texID)
 
-                % Call the bounding box function
-                [limits, boundingBox] = calculateBoundingBox(vertices, obj.cueProperties{1}.localTransform, globalTransform, projectionMatrix);
+            glTranslatef(perCueX, 0, perCueY);
 
-                %disp(limits);
+             glBindTexture(obj.GL.TEXTURE_2D, texID)
+             
+             for i = 1:numel(perCue.faces(1,:))
+             
+                 if numel(perCue.faces(:, 1)) == 3
+                     glBegin(obj.GL.TRIANGLES);
+                 else
+                     glBegin(obj.GL.QUADS);
+                 end
+             
+                 for j = 1:numel(perCue.faces(:, 1))
+             
+                     vertexIndex = perCue.faces(j, i) + 1;
+                     texID = sum(perCue.faces(:, i)) + 3;
+                     texMapping = 0;
 
-                % Set up color for wireframe (e.g., red)
-                glColor3f(1, 0, 0);
+                    if vertexIndex > 0 && vertexIndex <= numel(perCue.vertices(1,:))
+                        glNormal3fv(perCue.normals(:, vertexIndex));
 
-                % Draw the wireframe
+                        if ~isempty(perCue.texcoords)
+
+                            for k = 1:numel(perCue.vertexTexcoordMap{1, vertexIndex})
+
+                                if texID == perCue.vertexTexcoordMap{1,vertexIndex}(k).texnum
+                                    texMapping = perCue.vertexTexcoordMap{1, vertexIndex}(k).texVals;
+                                end
+                            end
+                           glTexCoord2fv(texMapping);
+                        end 
+
+                        %glTexCoord2fv(obj.cueProperties{1}.texcoords(:, vertexIndex));
+                        glVertex3fv(perCue.vertices(:, vertexIndex) * perScale);
+                    else
+                        fprintf('Invalid vertex index: %d\n', vertexIndex);
+                    end
+                 end
+                 glEnd();
+             end
+
+        end
+
+        function obj = boundBoxInitialize(obj, Cue, xCue, yCue, scale, perAngle,screenAspect)
+
+            % Accumulate translation
+            % Initialize local transformation matrix as an identity matrix
+            Cue.localTransform = eye(4);
+            translationVector = [0, 0, 0];
+            translationMatrix = makehgtform('translate', translationVector);
+            Cue.localTransform = Cue.localTransform * translationMatrix;
+
+            % Assume obj is your 3D object structure with fields like cueProperties, localTransform, etc.
+            vertices = Cue.vertices * scale;
+
+            % Set up the perspective projection matrix
+            projectionMatrix = perspectiveProjectionMatrix(perAngle, screenAspect, 0.08, 20.0);
+
+            %Global Transform
+            globaltranslationVector = [0, 0, 0];
+            rotationAngles = [0, 0, 0]; % Angles in degrees
+            
+            % Create translation matrix
+            T = eye(4);
+            T(1:3, 4) = globaltranslationVector;
+            
+            % Create rotation matrix (assuming rotation is around the origin)
+            R = euler2rotmat(rotationAngles);
+
+            % Combine translation and rotation
+            globalTransform = T * R;
+
+            % Call the bounding box function
+            [limits, boundingBox] = calculateBoundingBox(vertices, Cue.localTransform, globalTransform, projectionMatrix);
+
+            % Set up color for wireframe (e.g., red)
+            glColor3f(1, 0, 0);
+
+            obj = obj.drawBoundingBox(boundingBox);
+        end
+
+        function obj = drawBoundingBox(obj, boundingBox)
+            % Draw the wireframe
                 glBegin(obj.GL.LINES);
-
-                scale = 0.1;
 
                 % Bottom
                 glVertex3fv(boundingBox(:, 1));
@@ -879,32 +798,6 @@ classdef Render
                 glVertex3fv(boundingBox(:, 4));
                 glVertex3fv(boundingBox(:, 8));
                 glEnd();
-     
-                glPopMatrix;
-
-                %------------BoundedBox Setup----------------
-
-
-           end
-       
-            glPopMatrix();
-            Screen('EndOpenGL', obj.viewportPtr);
-            Screen('Flip', obj.viewportPtr);          
-            
-        end
-        
-        function obj = set.perspectiveAngle(obj, PerspectiveAngle)
-            
-            if isnumeric(PerspectiveAngle) && (PerspectiveAngle >= 0) && (PerspectiveAngle <= 180)
-                
-                obj.perspectiveAngle = PerspectiveAngle;
-                
-            else
-                
-                error('Perspective angle must be >=0 and <= 180');
-                
-            end
-            
         end
         
     end
