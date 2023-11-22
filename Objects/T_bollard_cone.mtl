@@ -1,0 +1,12 @@
+# Blender 3.6.5 MTL File: 'None'
+# www.blender.org
+
+newmtl Material.002
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:/Users/olude/Downloads/t-bollard/source/SkechtF/SkechtF/Bollard_DefaultMaterial_Diffuse.jpg
+map_Ks C:/Users/olude/Downloads/t-bollard/source/SkechtF/SkechtF/Bollard_DefaultMaterial_Specular.jpg

@@ -1,0 +1,13 @@
+# Blender 3.6.5 MTL File: 'None'
+# www.blender.org
+
+newmtl stool
+Ka 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd C:/Users/olude/Downloads/wooden-stool-low-poly/source/Stool/Stool/textures/stool_BaseColor.png
+map_Ks C:/Users/olude/Downloads/wooden-stool-low-poly/source/Stool/Stool/textures/stool_Metalness.png
+map_Ns C:/Users/olude/Downloads/wooden-stool-low-poly/source/Stool/Stool/textures/stool_Roughness.png
+map_Bump -bm 1.000000 C:/Users/olude/Downloads/wooden-stool-low-poly/source/Stool/Stool/textures/stool_Normal.png

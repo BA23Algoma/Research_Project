@@ -1,0 +1,14 @@
+# Blender 3.6.5 MTL File: 'None'
+# www.blender.org
+
+newmtl urn
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd Z:/Personal Projects/Substance_Painter/URN/textures/urn high_urn_BaseColor.1001.png
+map_Ns Z:/Personal Projects/Substance_Painter/URN/textures/urn high_urn_Roughness.1001.png
+map_refl Z:/Personal Projects/Substance_Painter/URN/textures/urn high_urn_Metallic.1001.png
+map_Bump -bm 1.000000 Z:/Personal Projects/Substance_Painter/URN/textures/urn high_urn_Normal.1001.png
