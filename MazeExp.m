@@ -1,4 +1,4 @@
-         function MazeExp                   
+                        function MazeExp                              
          
     %     %   GUI modifiable parameters                     
     %     p.participantId                 = 0;
@@ -308,4 +308,3 @@
     
     Render.Close();
     
-end

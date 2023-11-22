@@ -9,6 +9,7 @@ classdef Maze
         targetWallArray;
         tripWireArray;
         distalQueue;
+        perQueue;
         
         % Built-in objects
         depth;
@@ -117,7 +118,7 @@ classdef Maze
                             
                             coordPoll = coordPoll.Stop();
                             
-                            tripSum = sum( [obj.tripWireArray(:).tripCount] );
+                            tripSum = sum([obj.tripWireArray(:).tripCount]);
                             
                             stats = [tDelta tripSum];
                             
@@ -322,6 +323,15 @@ classdef Maze
                  obj.distalQueue.x(2) = d(3);
                  obj.distalQueue.y(2) = d(4);
                 
+                  % Proximal Queue Locations
+
+                 fgets(fid); % Skip comment line
+                 q = fgets(fid);
+                 prox = sscanf(q, '%f');
+                 obj.perQueue.x(1) = prox(1);
+                 obj.perQueue.y(1) = prox(2);
+                 obj.perQueue.x(2) = prox(3);
+                 obj.perQueue.y(2) = prox(4);
                 fclose(fid);
                 
 %                 obj = VectorizeWalls(obj);

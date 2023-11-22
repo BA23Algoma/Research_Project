@@ -159,8 +159,6 @@ classdef Keyboard < InputDevice
                 if keyCode(obj.escapeCode)
                     
                     Render.Close();
-                    %Close the session socket
-                    CleanUpSocket(session1_client);
                     
                 end
                 
