@@ -1,0 +1,66 @@
+<<<<<<< HEAD
+Texture Files Sources
+Soccer Ball - Prabath-weerapana
+https://www.cgtrader.com/free-3d-models/sports/game/3d-foot-ball
+
+Moon Model - CGSleet
+
+****Skybox Texture****
+https://opengameart.org/content/miramar-skybox
+"THIS SKY WAS UPDATED AT THE 27TH
+THE ORIG HAD SOME ERRORS
+MIRAMAR
+high res 1024^2 environment map
+ships as TGA.
+By Jockum Skoglund aka hipshot
+hipshot@zfight.com
+www.zfight.com
+Stockholm, 2005 08 25
+Modify however you like, just cred me for my work, maybe link to my page."
+
+****Moon Texture - Download from user Bondiana on CGtrader****
+https://www.cgtrader.com/free-3d-models/space/other/low-poly-moon
+Downloaded under the Royalty Free License by CGTrader
+"Royalty Free License allows you to use the product without the need to pay royalties or other license fees for multiple uses, per volume sold, or some time period of use or sales. Products published with this license may not be sold, given, or assigned to another person or entity in the form it is downloaded from the site, but can be used in your commercial projects multiple times after paying for it just once.
+
+This is, however, a non-exclusive license and the product remains the property of a seller for further distribution. Please, refer to legally binding General Terms and Conditions to learn more about Royalty Free License, other types of licenses and general rules applicable to all products." (From CGTrader website)
+=======
+Texture Files Sources
+Moon Model - CGSleet
+
+****Skybox Texture****
+https://opengameart.org/content/miramar-skybox
+"THIS SKY WAS UPDATED AT THE 27TH
+THE ORIG HAD SOME ERRORS
+MIRAMAR
+high res 1024^2 environment map
+ships as TGA.
+By Jockum Skoglund aka hipshot
+hipshot@zfight.com
+www.zfight.com
+Stockholm, 2005 08 25
+Modify however you like, just cred me for my work, maybe link to my page."
+
+****Moon Texture - Download from user Bondiana on CGtrader****
+https://www.cgtrader.com/free-3d-models/space/other/low-poly-moon
+Downloaded under the Royalty Free License by CGTrader
+"Royalty Free License allows you to use the product without the need to pay royalties or other license fees for multiple uses, per volume sold, or some time period of use or sales. Products published with this license may not be sold, given, or assigned to another person or entity in the form it is downloaded from the site, but can be used in your commercial projects multiple times after paying for it just once.
+
+This is, however, a non-exclusive license and the product remains the property of a seller for further distribution. Please, refer to legally binding General Terms and Conditions to learn more about Royalty Free License, other types of licenses and general rules applicable to all products." (From CGTrader website)
+
+****Crate Texture - Download from user Tyro Smith on free 3d****
+https://free3d.com/3d-model/crate-86737.html
+Listed under - Personal Use License
+"DESCRIPTION
+A crate.
+
+You can use this for anything.
+
+Made by Tyro Smith
+
+If you would like to donate, please visit my website."
+Note: Could not find personal user licese but the site does contain the following rolyalty free License
+
+Royalty Free License
+This is a legally binding agreement between licensee (“you”), and Free3D regarding your rights to use Stock Media Products from the Site under this license. “You” refers to the purchasing entity, whether that is a natural person who must be at least 18 years of age, or a corporate entity. The rights granted in this agreement are granted to the purchasing entity, its parent company, and its majority owned affiliates on a “royalty free” basis, which means that after a Purchase, there are no future royalties or payments that are required. Collectively, these rights are considered “extended uses”, and are granted to you, subject to applicable Editorial Use Restrictions described below. The license granted is wholly transferable to other parties so long it is in force and not terminated, otherwise violated, or extinguished, as set forth herein. This agreement incorporates by reference the Terms of Use as well as the Site’s policies and procedures as such.
+>>>>>>> c7761a90b4c87af4c413990f65d679c0f02481b1

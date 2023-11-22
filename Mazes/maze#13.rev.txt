@@ -1,0 +1,78 @@
+<<<<<<< HEAD
+wall-width  wall-depth  #-of-trials  #-of-walls  #-of-trip wires  hot_spots
+    6	        6	     1	         22	       5	      0    
+# Walls (2 points each wall (x,y) form a line)
+0.5	0.0	6.0	0.0	Rock.bmp
+6.0	0.0	6.0	6.0	Rock.bmp
+6.0	6.0	0.5	6.0	Rock.bmp
+0.0	5.5	0.0	0.5	Rock.bmp
+0.0	0.5	-0.5	0.0	Rock.bmp
+-0.5	0.0	0.0	-0.5	Rock.bmp
+0.0	-0.5	0.5	0.0	Rock.bmp
+0.0	5.5	-0.5	6.0	Cheese.bmp
+-0.5	6.0	0.0	6.5	Cheese.bmp
+0.5	6.0	0.0	6.5	Cheese.bmp
+1.0 	0.0 	1.0 	1.0	Rock.bmp
+1.0 	1.0 	3.0 	1.0	Rock.bmp
+3.0 	1.0 	3.0 	3.0	Rock.bmp
+0.0 	2.0 	1.0 	2.0	Rock.bmp
+1.0 	2.0 	1.0 	4.0	Rock.bmp
+1.0 	4.0 	5.0 	4.0	Rock.bmp	
+2.0 	2.0 	2.0 	3.0	Rock.bmp
+2.0 	3.0 	3.0 	3.0	Rock.bmp
+1.0 	5.0 	1.0 	6.0	Rock.bmp
+1.0 	5.0 	4.0 	5.0	Rock.bmp
+5.0 	3.0 	5.0 	1.0	Rock.bmp
+4.0 	2.0 	6.0 	2.0	Rock.bmp
+#Trip wire
+5.0 	4.0 	5.0 	6.0
+3.0 	4.0 	3.0 	6.0
+6.0 	3.0 	3.0 	3.0
+3.0 	1.0 	3.0 	0.0
+0.0 	4.0 	1.0 	4.0
+#Distal Queue
+5.0	5.0	-5.0	-5.0
+#Proximal or peripheral Queue - Two object (x,y)
+4.0     2.0     6.0     6.0
+//line is listed as width then depth, for the start and end of line
+=======
+wall-width  wall-depth  #-of-trials  #-of-walls  #-of-trip wires  hot_spots
+    6	        6	     1	         22	       5	      0    
+# Walls (2 points each wall (x,y) form a line)
+0.5	0.0	6.0	0.0	Rock.bmp
+6.0	0.0	6.0	6.0	Rock.bmp
+6.0	6.0	0.5	6.0	Rock.bmp
+0.0	5.5	0.0	0.5	Rock.bmp
+0.0	0.5	-0.5	0.0	Rock.bmp
+-0.5	0.0	0.0	-0.5	Rock.bmp
+0.0	-0.5	0.5	0.0	Rock.bmp
+0.0	5.5	-0.5	6.0	Cheese.bmp
+-0.5	6.0	0.0	6.5	Cheese.bmp
+0.5	6.0	0.0	6.5	Cheese.bmp
+1.0 	0.0 	1.0 	1.0	Rock.bmp
+1.0 	1.0 	3.0 	1.0	Rock.bmp
+3.0 	1.0 	3.0 	3.0	Rock.bmp
+0.0 	2.0 	1.0 	2.0	Rock.bmp
+1.0 	2.0 	1.0 	4.0	Rock.bmp
+1.0 	4.0 	5.0 	4.0	Rock.bmp	
+2.0 	2.0 	2.0 	3.0	Rock.bmp
+2.0 	3.0 	3.0 	3.0	Rock.bmp
+1.0 	5.0 	1.0 	6.0	Rock.bmp
+1.0 	5.0 	4.0 	5.0	Rock.bmp
+5.0 	3.0 	5.0 	1.0	Rock.bmp
+4.0 	2.0 	6.0 	2.0	Rock.bmp
+#Trip wire
+5.0 	4.0 	5.0 	6.0
+3.0 	4.0 	3.0 	6.0
+6.0 	3.0 	3.0 	3.0
+3.0 	1.0 	3.0 	0.0
+0.0 	4.0 	1.0 	4.0
+#Distal Queue
+5.0	5.0	-5.0	-5.0
+#Peripheral Queue - 1, (X,Y, Scale, OBJ File, Texture)
+-1.0	1.5	0.5	Cabinent.obj Cabinent.png
+#Peripheral Queue - 2, (X,Y, Scale, OBJ File, Texture)
+-1.0	2.0	0.5	Breifcase.obj Briefcase.png
+//line is listed as width then depth, for the start and end of line
+>>>>>>> c7761a90b4c87af4c413990f65d679c0f02481b1
+//first 10 walls are the default 'open' maze
